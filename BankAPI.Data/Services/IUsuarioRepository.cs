@@ -1,6 +1,6 @@
 ﻿using BankAPI.Model;
 
-namespace BankAPI.Data.Repositories
+namespace BankAPI.Data.Services
 {
     public interface IUsuarioRepository
     {
