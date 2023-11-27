@@ -1,6 +1,6 @@
 using BankAPI.Model;
 namespace BankAPI.Data.Services;
-public interface ICLienteRepository
+public interface IClienteRepository
 {
     Task<IEnumerable<Cliente>> GetClientes();
     Task<Cliente> GetClienteById(int id);
