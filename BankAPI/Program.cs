@@ -19,29 +19,29 @@ builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetCo
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-//builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
-//builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
 //builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 //builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 //builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PolíticaCORS", app =>
+    options.AddPolicy("Polï¿½ticaCORS", app =>
     {
         app.AllowAnyOrigin()
-        .AllowAnyHeader() 
+        .AllowAnyHeader()
         .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
 
-// Eliminar en producción
+// Eliminar en producciï¿½n
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors("PolíticaCORS");
+app.UseCors("Polï¿½ticaCORS");
 
 app.UseHttpsRedirection();
 
