@@ -4,7 +4,7 @@ namespace BankAPI.Data.Services
 {
     public interface IPedidoRepository
     {
-        Task<IEnumerable<Pedido>> GetUsuarios();
+        Task<IEnumerable<Pedido>> GetPedidos();
         Task<Pedido> GetPedidoById(int id);
         Task<Pedido> GetPedidoByDate(DateTime fecha);
         Task<bool> InsertPedido(Pedido pedido);

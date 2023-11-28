@@ -17,13 +17,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 //builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
 //builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
-//builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-//builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
-//builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
 
 builder.Services.AddCors(options =>
 {
