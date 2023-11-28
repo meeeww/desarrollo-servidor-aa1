@@ -1,6 +1,7 @@
 using BankAPI.Data;
 using BankAPI.Data.Repositories;
 using BankAPI.Data.Services;
+using BankAPI.Model;
 using MySql.Data.MySqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +19,11 @@ builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetCo
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IDetallePedidoRepository, ClienteRepository>();
-builder.Services.AddScoped<IEmpleadoRepository, ClienteRepository>();
-builder.Services.AddScoped<IPedidoRepository, ClienteRepository>();
-builder.Services.AddScoped<IProductoRepository, ClienteRepository>();
-builder.Services.AddScoped<IRegistroVentasRepository, ClienteRepository>();
+//builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
+//builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+//builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+//builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+//builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
 
 builder.Services.AddCors(options =>
 {
