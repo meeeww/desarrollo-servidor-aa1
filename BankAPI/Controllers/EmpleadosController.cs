@@ -16,7 +16,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmpleaados()
+        public async Task<IActionResult> GetEmpleados()
         {
             return Ok(await _empleadoRepository.GetEmpleados());
         }

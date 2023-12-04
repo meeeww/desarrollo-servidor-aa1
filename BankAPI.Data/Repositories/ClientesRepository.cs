@@ -59,7 +59,7 @@ public class ClientesRepository : IClientesRepository
     {
         var db = dbConnection();
 
-        var sql = @"INSERT INTO Clientes (ID_Cliente , Nombre , Apellido , Email , Telefono , Direccion) VALUES (@Nombre , @Apellido , @Email , @Telefono , @Direccion) ";
+        var sql = @"INSERT INTO Clientes (Nombre , Apellido , Email , Telefono , Direccion) VALUES (@Nombre , @Apellido , @Email , @Telefono , @Direccion) ";
 
         var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
 
