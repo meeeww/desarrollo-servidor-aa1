@@ -16,32 +16,54 @@ public class EmpleadoRepository : IEmpleadoRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public Task<bool> DeleteEmpleado(Empleado empleado)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Empleado> GetEmpleadoById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<Empleado>> GetEmpleados()
+    public async Task<bool> DeleteEmpleado(Empleados empleado)
     {
         var db = dbConnection();
 
-        var sql = @"SELECT * FROM Empleado";
+        var sql = @"DELETE FROM Empleados WHERE ID_Empleado = @Id ";
 
-        return await db.QueryAsync<Empleado>(sql, new { });
+        var result = await db.ExecuteAsync(sql, new { });
+
+        return result > 0;
     }
 
-    public Task<bool> InsertEmpleado(Empleado empleado)
+    public async Task<Empleados> GetEmpleadoById(int id)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"SELECT * FROM Empleados WHERE ID_Empleados = @Id";
+
+        return await db.QueryFirstOrDefaultAsync<Empleados>(sql, new { Id = id });
     }
 
-    public Task<bool> UpdateEmpleado(Empleado empleado)
+    public async Task<IEnumerable<Empleados>> GetEmpleados()
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"SELECT * FROM Empleados";
+
+        return await db.QueryAsync<Empleados>(sql, new { });
+    }
+
+    public async Task<bool> InsertEmpleado(Empleados Empleados)
+    {
+        var db = dbConnection();
+
+        var sql = @"INSERT INTO Empleados (Nombre , Apellido , Cargo , Salario) VALUES (@Nombre , @Apellido , @Cargo , @Salario)";
+
+        var result = await db.ExecuteAsync(sql, new { });
+
+        return result > 0;
+    }
+
+    public async Task<bool> UpdateEmpleado(Empleados empleado)
+    {
+        var db = dbConnection();
+
+        var sql = @"UPDATE Empleados SET Nombre = @Nombre , Apellido = @Apellido , Cargo = @Cargo , Salario = @Salario"; // Corrección aquí
+
+        var result = await db.ExecuteAsync(sql, new { empleado.Nombre, empleado.Apellido, empleado.Cargo, empleado.Salario });
+
+        return result > 0;
     }
 }
