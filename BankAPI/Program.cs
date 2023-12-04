@@ -17,30 +17,30 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-//builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
-//builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
+builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PolíticaCORS", app =>
+    options.AddPolicy("Polï¿½ticaCORS", app =>
     {
         app.AllowAnyOrigin()
-        .AllowAnyHeader() 
+        .AllowAnyHeader()
         .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
 
-// Eliminar en producción
+// Eliminar en producciï¿½n
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors("PolíticaCORS");
+app.UseCors("Polï¿½ticaCORS");
 
 app.UseHttpsRedirection();
 
