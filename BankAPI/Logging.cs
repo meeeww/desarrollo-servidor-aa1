@@ -21,9 +21,9 @@ namespace BankAPI
                     if (frame != null)
                     {
                         // Escribir información adicional
-                        writer.WriteLine($"Función: {frame.GetMethod().Name}");
-                        writer.WriteLine($"Archivo: {frame.GetFileName()}");
-                        writer.WriteLine($"Línea: {frame.GetFileLineNumber()}");
+                        writer.WriteLine($"Function: {frame.GetMethod().Name}");
+                        writer.WriteLine($"File: {frame.GetFileName()}");
+                        writer.WriteLine($"Line: {frame.GetFileLineNumber()}");
                     }
                 }
             }

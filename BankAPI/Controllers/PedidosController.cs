@@ -1,4 +1,5 @@
-﻿using BankAPI.Data.Services;
+﻿using BankAPI.Data.Repositories;
+using BankAPI.Data.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace BankAPI.Controllers
     public class PedidosController : ControllerBase
     {
         private readonly IPedidosRepository _pedidoRepository;
+        Logging logger = new Logging();
 
         public PedidosController(IPedidosRepository pedidoRepository)
         {
@@ -18,58 +20,106 @@ namespace BankAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPedidos()
         {
-            return Ok(await _pedidoRepository.GetPedidos());
+            try
+            {
+                return Ok(await _pedidoRepository.GetPedidos());
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPedidoById(int id)
         {
-            return Ok(await _pedidoRepository.GetPedidoById(id));
+            try
+            {
+                return Ok(await _pedidoRepository.GetPedidoById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("fecha={fecha}")]
         public async Task<IActionResult> GetPedidoByDate(string fecha)
         {
-            if (!DateTime.TryParse(fecha, out DateTime parsedDate))
-                return BadRequest("Invalid date format");
+            try
+            {
+                if (!DateTime.TryParse(fecha, out DateTime parsedDate))
+                    return BadRequest("Invalid date format");
 
-            return Ok(await _pedidoRepository.GetPedidoByDate(parsedDate));
+                return Ok(await _pedidoRepository.GetPedidoByDate(parsedDate));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePedido([FromBody] Pedido pedido)
         {
-            if (pedido == null)
-                return BadRequest();
+            try
+            {
+                if (pedido == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var created = await _pedidoRepository.InsertPedido(pedido);
+                var created = await _pedidoRepository.InsertPedido(pedido);
 
-            return Created("creado", created);
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdatePedido([FromBody] Pedido pedido)
         {
-            if (pedido == null)
-                return BadRequest();
+            try
+            {
+                if (pedido == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            await _pedidoRepository.UpdatePedido(pedido);
+                await _pedidoRepository.UpdatePedido(pedido);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {
-            await _pedidoRepository.DeletePedido(new Pedido() { ID_Pedido = id });
+            try
+            {
+                await _pedidoRepository.DeletePedido(new Pedido() { ID_Pedido = id });
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
