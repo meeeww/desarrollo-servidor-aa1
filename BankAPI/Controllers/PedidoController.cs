@@ -8,9 +8,9 @@ namespace BankAPI.Controllers
     [ApiController]
     public class PedidoController : ControllerBase
     {
-        private readonly IPedidoRepository _pedidoRepository;
+        private readonly IPedidosRepository _pedidoRepository;
 
-        public PedidoController(IPedidoRepository pedidoRepository)
+        public PedidoController(IPedidosRepository pedidoRepository)
         {
             _pedidoRepository = pedidoRepository;
         }

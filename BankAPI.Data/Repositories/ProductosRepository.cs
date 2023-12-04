@@ -2,16 +2,14 @@
 using BankAPI.Model;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BankAPI.Data.Repositories
 {
-    public class ProductoRepository : IProductoRepository
+    public class ProductosRepository : IProductosRepository
     {
         private readonly MySQLConfiguration _connectionString;
 
-        public ProductoRepository(MySQLConfiguration connectionString)
+        public ProductosRepository(MySQLConfiguration connectionString)
         {
             _connectionString = connectionString;
         }
@@ -25,7 +23,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Producto";
+            var sql = @"SELECT * FROM Productos";
 
             return await db.QueryAsync<Productos>(sql, new { });
         }
@@ -34,7 +32,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Producto WHERE ID_Producto = @Id";
+            var sql = @"SELECT * FROM Productos WHERE ID_Producto = @Id";
 
             return await db.QueryFirstOrDefaultAsync<Productos>(sql, new { Id = id });
         }
@@ -43,15 +41,16 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO Producto (Nombre, Descripcion, Precio, Stock) 
-                        VALUES (@Nombre, @Descripcion, @Precio, @Stock)";
+            var sql = @"INSERT INTO Productos (Nombre, Descripcion, Precio, Stock, Imagen) 
+                        VALUES (@Nombre, @Descripcion, @Precio, @Stock, @Imagen)";
 
             var result = await db.ExecuteAsync(sql, new
             {
                 producto.Nombre,
                 producto.Descripcion,
                 producto.Precio,
-                producto.Stock
+                producto.Stock,
+                producto.Imagen
             });
 
             return result > 0;
@@ -61,9 +60,9 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"UPDATE Producto 
+            var sql = @"UPDATE Productos 
                         SET Nombre = @Nombre, Descripcion = @Descripcion, 
-                            Precio = @Precio, Stock = @Stock 
+                            Precio = @Precio, Stock = @Stock , Imagen = @Imagen
                         WHERE ID_Producto = @Id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -72,6 +71,7 @@ namespace BankAPI.Data.Repositories
                 producto.Descripcion,
                 producto.Precio,
                 producto.Stock,
+                producto.Imagen,
                 Id = producto.ID_Producto
             });
 
@@ -82,7 +82,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"DELETE FROM Producto WHERE ID_Producto = @Id";
+            var sql = @"DELETE FROM Productos WHERE ID_Producto = @Id";
 
             var result = await db.ExecuteAsync(sql, new { Id = producto.ID_Producto });
 

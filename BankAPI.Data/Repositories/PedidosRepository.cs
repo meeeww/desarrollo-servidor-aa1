@@ -2,17 +2,14 @@
 using BankAPI.Model;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BankAPI.Data.Repositories
 {
-    public class PedidoRepository : IPedidoRepository
+    public class PedidosRepository : IPedidosRepository
     {
         private readonly MySQLConfiguration _connectionString;
 
-        public PedidoRepository(MySQLConfiguration connectionString)
+        public PedidosRepository(MySQLConfiguration connectionString)
         {
             _connectionString = connectionString;
         }
@@ -26,7 +23,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Pedido";
+            var sql = @"SELECT * FROM Pedidos";
 
             return await db.QueryAsync<Pedidos>(sql, new { });
         }
@@ -35,7 +32,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Pedido WHERE ID_Pedido = @Id";
+            var sql = @"SELECT * FROM Pedidos WHERE ID_Pedido = @Id";
 
             return await db.QueryFirstOrDefaultAsync<Pedidos>(sql, new { Id = id });
         }
@@ -44,7 +41,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Pedido WHERE Fecha = @Fecha";
+            var sql = @"SELECT * FROM Pedidos WHERE Fecha = @Fecha";
 
             return await db.QueryFirstOrDefaultAsync<Pedidos>(sql, new { Fecha = fecha });
         }
@@ -53,14 +50,16 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO Pedido (ID_Cliente, Fecha, Total) 
-                        VALUES (@ID_Cliente, @Fecha, @Total)";
+            var sql = @"INSERT INTO Pedidos (ID_Cliente, Fecha, Total, Enviado, MetodoPago) 
+                        VALUES (@ID_Cliente, @Fecha, @Total, @Enviado, @MetodoPago)";
 
             var result = await db.ExecuteAsync(sql, new
             {
                 pedido.ID_Cliente,
                 pedido.Fecha,
-                pedido.Total
+                pedido.Total,
+                pedido.Enviado,
+                pedido.MetodoPago
             });
 
             return result > 0;
@@ -70,9 +69,9 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"UPDATE Pedido 
+            var sql = @"UPDATE Pedidos
                         SET ID_Cliente = @ID_Cliente, Fecha = @Fecha, 
-                            Total = @Total 
+                            Total = @Total, Enviado = @Enviado, MetodoPago = @MetodoPago
                         WHERE ID_Pedido = @Id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -80,6 +79,8 @@ namespace BankAPI.Data.Repositories
                 pedido.ID_Cliente,
                 pedido.Fecha,
                 pedido.Total,
+                pedido.Enviado,
+                pedido.MetodoPago,
                 Id = pedido.ID_Pedido
             });
 
@@ -90,7 +91,7 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"DELETE FROM Pedido WHERE ID_Pedido = @Id";
+            var sql = @"DELETE FROM Pedidos WHERE ID_Pedido = @Id";
 
             var result = await db.ExecuteAsync(sql, new { Id = pedido.ID_Pedido });
 

@@ -20,8 +20,8 @@ builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetCo
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 //builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
 //builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
+builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
 
 builder.Services.AddCors(options =>

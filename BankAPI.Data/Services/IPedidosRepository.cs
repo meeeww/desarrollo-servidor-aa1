@@ -2,7 +2,7 @@ using BankAPI.Model;
 
 namespace BankAPI.Data.Services
 {
-    public interface IPedidoRepository
+    public interface IPedidosRepository
     {
         Task<IEnumerable<Pedidos>> GetPedidos();
         Task<Pedidos> GetPedidoById(int id);

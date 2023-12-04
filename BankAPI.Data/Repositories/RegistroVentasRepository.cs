@@ -2,8 +2,6 @@
 using BankAPI.Model;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BankAPI.Data.Repositories
 {
@@ -52,9 +50,9 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO RegistroVentas (ID_Empleado, Fecha, TotalVentas) VALUES (@ID_Empleado, @Fecha, @TotalVentas)";
+            var sql = @"INSERT INTO RegistroVentas (ID_Empleado, Fecha, TotalVentas, TotalCostos, TotalImpuestos) VALUES (@ID_Empleado, @Fecha, @TotalVentas, @TotalCostos, @TotalImpuestos)";
 
-            var result = await db.ExecuteAsync(sql, new { registroVentas.ID_Empleado, registroVentas.Fecha, registroVentas.TotalVentas });
+            var result = await db.ExecuteAsync(sql, new { registroVentas.ID_Empleado, registroVentas.Fecha, registroVentas.TotalVentas, registroVentas.TotalCostos, registroVentas.TotalImpuestos });
 
             return result > 0;
         }
@@ -63,9 +61,9 @@ namespace BankAPI.Data.Repositories
         {
             var db = dbConnection();
 
-            var sql = @"UPDATE RegistroVentas SET ID_Empleado = @ID_Empleado, Fecha = @Fecha, TotalVentas = @TotalVentas WHERE ID_RegistroVentas = @ID_RegistroVentas";
+            var sql = @"UPDATE RegistroVentas SET ID_Empleado = @ID_Empleado, Fecha = @Fecha, TotalVentas = @TotalVentas, TotalCostos = @TotalCostos, TotalImpuestos = @TotalImpuestos WHERE ID_RegistroVentas = @ID_RegistroVentas";
 
-            var result = await db.ExecuteAsync(sql, new { registroVentas.ID_Empleado, registroVentas.Fecha, registroVentas.TotalVentas, registroVentas.ID_RegistroVentas });
+            var result = await db.ExecuteAsync(sql, new { registroVentas.ID_Empleado, registroVentas.Fecha, registroVentas.TotalVentas, registroVentas.TotalCostos, registroVentas.TotalImpuestos, registroVentas.ID_RegistroVentas });
 
             return result > 0;
         }

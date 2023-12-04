@@ -1,8 +1,6 @@
 ﻿using BankAPI.Data.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BankAPI.Controllers
 {
