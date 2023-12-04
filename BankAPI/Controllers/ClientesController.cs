@@ -9,6 +9,7 @@ namespace BankAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IClientesRepository _clienteRepository;
+        Logging logger = new Logging();
 
         public ClientesController(IClientesRepository clienteRepository)
         {
@@ -18,56 +19,106 @@ namespace BankAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetClientes()
         {
-            return Ok(await _clienteRepository.GetClientes());
+            try
+            {
+                return Ok(await _clienteRepository.GetClientes());
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClienteById(int id)
         {
-            return Ok(await _clienteRepository.GetClienteById(id));
+            try
+            {
+                return Ok(await _clienteRepository.GetClienteById(id));
+
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetClienteByEmail(string email)
         {
-            return Ok(await _clienteRepository.GetClienteByEmail(email));
+            try
+            {
+                return Ok(await _clienteRepository.GetClienteByEmail(email));
+
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPost]
         public async Task<IActionResult> InsertCliente([FromBody] Cliente cliente)
         {
-            if (cliente == null)
-                return BadRequest();
+            try
+            {
+                if (cliente == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var created = await _clienteRepository.InsertCliente(cliente);
+                var created = await _clienteRepository.InsertCliente(cliente);
 
-            return Created("creado", created);
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdatePedido([FromBody] Cliente cliente)
         {
-            if (cliente == null)
-                return BadRequest();
+            try
+            {
+                if (cliente == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            await _clienteRepository.UpdateCliente(cliente);
+                await _clienteRepository.UpdateCliente(cliente);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {
-            await _clienteRepository.DeleteCliente(new Cliente() { ID_Cliente = id });
+            try
+            {
+                await _clienteRepository.DeleteCliente(new Cliente() { ID_Cliente = id });
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

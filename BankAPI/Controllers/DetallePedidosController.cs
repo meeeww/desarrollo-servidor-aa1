@@ -9,6 +9,7 @@ namespace BankAPI.Controllers
     public class DetallePedidosController : ControllerBase
     {
         private readonly IDetallePedidosRepository _detallePedidoRepository;
+        Logging logger = new Logging();
 
         public DetallePedidosController(IDetallePedidosRepository detallePedidoRepository)
         {
@@ -24,43 +25,79 @@ namespace BankAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDetallePedidoById(int id)
         {
-            return Ok(await _detallePedidoRepository.GetDetallePedidoById(id));
+
+            try
+            {
+                return Ok(await _detallePedidoRepository.GetDetallePedidoById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> InsertDetallePedido([FromBody] DetallePedido detallePedido)
         {
-            if (detallePedido == null)
-                return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (detallePedido == null)
+                    return BadRequest();
 
-            var created = await _detallePedidoRepository.InsertDetallePedido(detallePedido);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Created("creado", created);
+                var created = await _detallePedidoRepository.InsertDetallePedido(detallePedido);
+
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateDetallePedido([FromBody] DetallePedido detallePedido)
         {
-            if (detallePedido == null)
-                return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (detallePedido == null)
+                    return BadRequest();
 
-            await _detallePedidoRepository.UpdateDetallePedido(detallePedido);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return NoContent();
+                await _detallePedidoRepository.UpdateDetallePedido(detallePedido);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDetallePedido(int id)
         {
-            await _detallePedidoRepository.DeleteDetallePedido(new DetallePedido() { ID_DetallePedido = id });
 
-            return NoContent();
+            try
+            {
+                await _detallePedidoRepository.DeleteDetallePedido(new DetallePedido() { ID_DetallePedido = id });
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

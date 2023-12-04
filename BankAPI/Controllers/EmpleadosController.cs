@@ -9,6 +9,7 @@ namespace BankAPI.Controllers
     public class EmpleadosController : ControllerBase
     {
         private readonly IEmpleadosRepository _empleadoRepository;
+        Logging logger = new Logging();
 
         public EmpleadosController(IEmpleadosRepository empleadoRepository)
         {
@@ -18,49 +19,94 @@ namespace BankAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEmpleados()
         {
-            return Ok(await _empleadoRepository.GetEmpleados());
+
+            try
+            {
+                return Ok(await _empleadoRepository.GetEmpleados());
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmpleadoById(int id)
         {
-            return Ok(await _empleadoRepository.GetEmpleadoById(id));
+
+            try
+            {
+                return Ok(await _empleadoRepository.GetEmpleadoById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> InsertEmpleado([FromBody] Empleado empleado)
         {
-            if (empleado == null)
-                return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (empleado == null)
+                    return BadRequest();
 
-            var created = await _empleadoRepository.InsertEmpleado(empleado);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Created("creado", created);
+                var created = await _empleadoRepository.InsertEmpleado(empleado);
+
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateEmpleado([FromBody] Empleado empleado)
         {
-            if (empleado == null)
-                return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (empleado == null)
+                    return BadRequest();
 
-            await _empleadoRepository.UpdateEmpleado(empleado);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return NoContent();
+                await _empleadoRepository.UpdateEmpleado(empleado);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmpleado(int id)
         {
-            await _empleadoRepository.DeleteEmpleado(new Empleado() { ID_Empleado = id });
 
-            return NoContent();
+            try
+            {
+                await _empleadoRepository.DeleteEmpleado(new Empleado() { ID_Empleado = id });
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
