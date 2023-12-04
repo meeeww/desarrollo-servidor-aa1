@@ -1,5 +1,5 @@
 namespace BankAPI.Model;
-public class Pedidos
+public class Pedido
 {
     public int ID_Pedido { get; set; }
     public int ID_Cliente { get; set; }

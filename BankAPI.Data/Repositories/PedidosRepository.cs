@@ -19,34 +19,34 @@ namespace BankAPI.Data.Repositories
             return new MySqlConnection(_connectionString.ConnectionString);
         }
 
-        public async Task<IEnumerable<Pedidos>> GetPedidos()
+        public async Task<IEnumerable<Pedido>> GetPedidos()
         {
             var db = dbConnection();
 
             var sql = @"SELECT * FROM Pedidos";
 
-            return await db.QueryAsync<Pedidos>(sql, new { });
+            return await db.QueryAsync<Pedido>(sql, new { });
         }
 
-        public async Task<Pedidos> GetPedidoById(int id)
+        public async Task<Pedido> GetPedidoById(int id)
         {
             var db = dbConnection();
 
             var sql = @"SELECT * FROM Pedidos WHERE ID_Pedido = @Id";
 
-            return await db.QueryFirstOrDefaultAsync<Pedidos>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<Pedido>(sql, new { Id = id });
         }
 
-        public async Task<Pedidos> GetPedidoByDate(DateTime fecha)
+        public async Task<Pedido> GetPedidoByDate(DateTime fecha)
         {
             var db = dbConnection();
 
             var sql = @"SELECT * FROM Pedidos WHERE Fecha = @Fecha";
 
-            return await db.QueryFirstOrDefaultAsync<Pedidos>(sql, new { Fecha = fecha });
+            return await db.QueryFirstOrDefaultAsync<Pedido>(sql, new { Fecha = fecha });
         }
 
-        public async Task<bool> InsertPedido(Pedidos pedido)
+        public async Task<bool> InsertPedido(Pedido pedido)
         {
             var db = dbConnection();
 
@@ -65,7 +65,7 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> UpdatePedido(Pedidos pedido)
+        public async Task<bool> UpdatePedido(Pedido pedido)
         {
             var db = dbConnection();
 
@@ -87,7 +87,7 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> DeletePedido(Pedidos pedido)
+        public async Task<bool> DeletePedido(Pedido pedido)
         {
             var db = dbConnection();
 

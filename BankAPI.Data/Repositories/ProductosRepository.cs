@@ -19,25 +19,25 @@ namespace BankAPI.Data.Repositories
             return new MySqlConnection(_connectionString.ConnectionString);
         }
 
-        public async Task<IEnumerable<Productos>> GetProductos()
+        public async Task<IEnumerable<Producto>> GetProductos()
         {
             var db = dbConnection();
 
             var sql = @"SELECT * FROM Productos";
 
-            return await db.QueryAsync<Productos>(sql, new { });
+            return await db.QueryAsync<Producto>(sql, new { });
         }
 
-        public async Task<Productos> GetProductoById(int id)
+        public async Task<Producto> GetProductoById(int id)
         {
             var db = dbConnection();
 
             var sql = @"SELECT * FROM Productos WHERE ID_Producto = @Id";
 
-            return await db.QueryFirstOrDefaultAsync<Productos>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<Producto>(sql, new { Id = id });
         }
 
-        public async Task<bool> InsertProducto(Productos producto)
+        public async Task<bool> InsertProducto(Producto producto)
         {
             var db = dbConnection();
 
@@ -56,7 +56,7 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> UpdateProducto(Productos producto)
+        public async Task<bool> UpdateProducto(Producto producto)
         {
             var db = dbConnection();
 
@@ -78,7 +78,7 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> DeleteProducto(Productos producto)
+        public async Task<bool> DeleteProducto(Producto producto)
         {
             var db = dbConnection();
 

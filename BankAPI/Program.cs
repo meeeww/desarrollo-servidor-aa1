@@ -21,8 +21,8 @@ builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
-builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
-builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IDetallePedidosRepository, DetallePedidosRepository>();
+builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
 
 builder.Services.AddCors(options =>
 {

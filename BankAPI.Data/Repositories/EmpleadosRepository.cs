@@ -5,10 +5,10 @@ using MySql.Data.MySqlClient;
 
 namespace BankAPI.Data.Repositories;
 
-public class EmpleadoRepository : IEmpleadoRepository
+public class EmpleadosRepository : IEmpleadosRepository
 {
     private MySQLConfiguration _connectionString;
-    public EmpleadoRepository(MySQLConfiguration connectionString)
+    public EmpleadosRepository(MySQLConfiguration connectionString)
     {
         _connectionString = connectionString;
     }
@@ -16,7 +16,7 @@ public class EmpleadoRepository : IEmpleadoRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public async Task<bool> DeleteEmpleado(Empleados empleado)
+    public async Task<bool> DeleteEmpleado(Empleado empleado)
     {
         var db = dbConnection();
 
@@ -27,25 +27,25 @@ public class EmpleadoRepository : IEmpleadoRepository
         return result > 0;
     }
 
-    public async Task<Empleados> GetEmpleadoById(int id)
+    public async Task<Empleado> GetEmpleadoById(int id)
     {
         var db = dbConnection();
 
         var sql = @"SELECT * FROM Empleados WHERE ID_Empleados = @Id";
 
-        return await db.QueryFirstOrDefaultAsync<Empleados>(sql, new { Id = id });
+        return await db.QueryFirstOrDefaultAsync<Empleado>(sql, new { Id = id });
     }
 
-    public async Task<IEnumerable<Empleados>> GetEmpleados()
+    public async Task<IEnumerable<Empleado>> GetEmpleados()
     {
         var db = dbConnection();
 
         var sql = @"SELECT * FROM Empleados";
 
-        return await db.QueryAsync<Empleados>(sql, new { });
+        return await db.QueryAsync<Empleado>(sql, new { });
     }
 
-    public async Task<bool> InsertEmpleado(Empleados Empleados)
+    public async Task<bool> InsertEmpleado(Empleado Empleados)
     {
         var db = dbConnection();
 
@@ -56,7 +56,7 @@ public class EmpleadoRepository : IEmpleadoRepository
         return result > 0;
     }
 
-    public async Task<bool> UpdateEmpleado(Empleados empleado)
+    public async Task<bool> UpdateEmpleado(Empleado empleado)
     {
         var db = dbConnection();
 
