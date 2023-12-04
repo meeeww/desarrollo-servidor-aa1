@@ -37,7 +37,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePedido([FromBody] Pedido pedido)
+        public async Task<IActionResult> CreatePedido([FromBody] Pedidos pedido)
         {
             if (pedido == null)
                 return BadRequest();
@@ -51,7 +51,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePedido([FromBody] Pedido pedido)
+        public async Task<IActionResult> UpdatePedido([FromBody] Pedidos pedido)
         {
             if (pedido == null)
                 return BadRequest();
@@ -67,7 +67,7 @@ namespace BankAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {
-            await _pedidoRepository.DeletePedido(new Pedido() { ID_Pedido = id });
+            await _pedidoRepository.DeletePedido(new Pedidos() { ID_Pedido = id });
 
             return NoContent();
         }

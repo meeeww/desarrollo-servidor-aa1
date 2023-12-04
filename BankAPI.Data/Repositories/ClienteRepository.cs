@@ -17,36 +17,36 @@ public class ClienteRepository : IClienteRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public Task<bool> DeleteCliente(Cliente cliente)
+    public Task<bool> DeleteCliente(Clientes cliente)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Cliente> GetClienteByEmail(string DNI)
+    public Task<Clientes> GetClienteByEmail(string DNI)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Cliente> GetClienteById(int id)
+    public Task<Clientes> GetClienteById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Cliente>> GetClientes()
+    public async Task<IEnumerable<Clientes>> GetClientes()
     {
         var db = dbConnection();
 
         var sql = @"SELECT * FROM Cliente";
 
-        return await db.QueryAsync<Cliente>(sql, new { });
+        return await db.QueryAsync<Clientes>(sql, new { });
     }
 
-    public Task<bool> InsertarCliente(Cliente cliente)
+    public Task<bool> InsertarCliente(Clientes cliente)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateCliente(Cliente cliente)
+    public Task<bool> UpdateCliente(Clientes cliente)
     {
         throw new NotImplementedException();
     }

@@ -2,10 +2,10 @@ using BankAPI.Model;
 namespace BankAPI.Data.Services;
 public interface IClienteRepository
 {
-    Task<IEnumerable<Cliente>> GetClientes();
-    Task<Cliente> GetClienteById(int id);
-    Task<Cliente> GetClienteByEmail(string DNI);
-    Task<bool> InsertarCliente(Cliente cliente);
-    Task<bool> UpdateCliente(Cliente cliente);
-    Task<bool> DeleteCliente(Cliente cliente);
+    Task<IEnumerable<Clientes>> GetClientes();
+    Task<Clientes> GetClienteById(int id);
+    Task<Clientes> GetClienteByEmail(string DNI);
+    Task<bool> InsertarCliente(Clientes cliente);
+    Task<bool> UpdateCliente(Clientes cliente);
+    Task<bool> DeleteCliente(Clientes cliente);
 }

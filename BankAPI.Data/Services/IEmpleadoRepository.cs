@@ -4,10 +4,10 @@ namespace BankAPI.Data.Services
 {
     public interface IEmpleadoRepository
     {
-        Task<IEnumerable<Empleado>> GetEmpleados();
-        Task<Empleado> GetEmpleadoById(int id);
-        Task<bool> InsertEmpleado(Empleado empleado);
-        Task<bool> UpdateEmpleado(Empleado empleado);
-        Task<bool> DeleteEmpleado(Empleado empleado);
+        Task<IEnumerable<Empleados>> GetEmpleados();
+        Task<Empleados> GetEmpleadoById(int id);
+        Task<bool> InsertEmpleado(Empleados empleado);
+        Task<bool> UpdateEmpleado(Empleados empleado);
+        Task<bool> DeleteEmpleado(Empleados empleado);
     }
 }

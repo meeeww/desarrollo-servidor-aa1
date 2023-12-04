@@ -30,7 +30,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProducto([FromBody] Producto producto)
+        public async Task<IActionResult> CreateProducto([FromBody] Productos producto)
         {
             if (producto == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProducto([FromBody] Producto producto)
+        public async Task<IActionResult> UpdateProducto([FromBody] Productos producto)
         {
             if (producto == null)
                 return BadRequest();
@@ -60,7 +60,7 @@ namespace BankAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProducto(int id)
         {
-            await _productoRepository.DeleteProducto(new Producto() { ID_Producto = id });
+            await _productoRepository.DeleteProducto(new Productos() { ID_Producto = id });
 
             return NoContent();
         }
