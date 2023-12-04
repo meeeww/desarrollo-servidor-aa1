@@ -17,37 +17,63 @@ public class ClienteRepository : IClienteRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public Task<bool> DeleteCliente(Cliente cliente)
+    public async Task<bool> DeleteCliente(Cliente cliente)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"DELETE FROM Clientes WHERE ID_Cliente = @Id ";
+
+        var result = await db.ExecuteAsync(sql, new { cliente.ID_Cliente });
+
+        return result > 0;
     }
 
-    public Task<Cliente> GetClienteByEmail(string DNI)
+    public async Task<Cliente> GetClienteByEmail(string email)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"SELECT * FROM Clientes WHERE Email = @Email";
+
+        return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Email = email });
     }
 
-    public Task<Cliente> GetClienteById(int id)
+    public async Task<Cliente> GetClienteById(int id)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"SELECT * FROM Clientes WHERE ID_Cliente = @Id";
+
+        return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
     }
 
     public async Task<IEnumerable<Cliente>> GetClientes()
     {
         var db = dbConnection();
 
-        var sql = @"SELECT * FROM Cliente";
+        var sql = @"SELECT * FROM Clientes";
 
         return await db.QueryAsync<Cliente>(sql, new { });
     }
 
-    public Task<bool> InsertarCliente(Cliente cliente)
+    public async Task<bool> InsertCliente(Cliente cliente)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"INSERT INTO Clientes (ID_Cliente , Nombre , Apellido , Email , Telefono , Direccion) VALUES (@Nombre , @Apellido , @Email , @Telefono , @Direccion) ";
+
+        var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
+
+        return result > 0;
     }
 
-    public Task<bool> UpdateCliente(Cliente cliente)
+    public async Task<bool> UpdateCliente(Cliente cliente)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"UPDATE Clientes SET Nombre = @Nombre , Apellido = @Apellido , Email = @Email , Telefono = @Telefono , Direccion = @Direccion"; // Corrección aquí
+
+        var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
+
+        return result > 0;
     }
 }

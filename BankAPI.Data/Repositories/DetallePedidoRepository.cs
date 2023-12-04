@@ -15,14 +15,23 @@ public class DetallePedidoRepository : IDetallePedidoRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public Task<bool> DeleteDetallePedido(DetallePedido detallePedido)
+    public async Task<bool> DeleteDetallePedido(DetallePedido detallePedido)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"DELETE FROM DetallePedidos WHERE ID_DetallePedido = @Id ";
+
+        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_DetallePedido });
+
+        return result > 0;
     }
 
-    public Task<DetallePedido> GetDetallePedidoById(int id)
+    public async Task<DetallePedido> GetDetallePedidoById(int id)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"SELECT * FROM DetalledPedidos WHERE ID_DetallePedido = @Id";
+        return await db.QueryFirstOrDefaultAsync(sql, new { Id = id });
     }
 
     public async Task<IEnumerable<DetallePedido>> GetDetallesPedido()
@@ -34,13 +43,24 @@ public class DetallePedidoRepository : IDetallePedidoRepository
         return await db.QueryAsync<DetallePedido>(sql, new { });
     }
 
-    public Task<bool> InsertDetallePedido(DetallePedido detallePedido)
+    public async Task<bool> InsertDetallePedido(DetallePedido detallePedido)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+        var sql = @"INSERT INTO DetalledPedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal)";
+        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal });
+
+
+        return result > 0;
     }
 
-    public Task<bool> UpdateDetallePedido(DetallePedido detallePedido)
+    public async Task<bool> UpdateDetallePedido(DetallePedido detallePedido)
     {
-        throw new NotImplementedException();
+        var db = dbConnection();
+
+        var sql = @"UPDATE DetallePedidos SET ID_Pedido  = @ID_Pedido , ID_Producto  = @ID_Producto , Cantidad = @Cantidad , Subtotal = @Subtotal"; // Corrección aquí
+
+        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal });
+
+        return result > 0;
     }
 }
