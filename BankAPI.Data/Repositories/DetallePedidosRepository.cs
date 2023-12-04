@@ -46,9 +46,8 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     public async Task<bool> InsertDetallePedido(DetallePedido detallePedido)
     {
         var db = dbConnection();
-        var sql = @"INSERT INTO DetallePedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal)";
-        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal });
-
+        var sql = @"INSERT INTO DetallePedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal, FechaCreacion , FechaModificacion) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal , @FechaCreacion, @FechaModificacion)";
+        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
 
         return result > 0;
     }
@@ -57,9 +56,9 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     {
         var db = dbConnection();
 
-        var sql = @"UPDATE DetallePedidos SET ID_Pedido  = @ID_Pedido , ID_Producto  = @ID_Producto , Cantidad = @Cantidad , Subtotal = @Subtotal"; // Corrección aquí
+        var sql = @"UPDATE DetallePedidos SET ID_Pedido  = @ID_Pedido , ID_Producto  = @ID_Producto , Cantidad = @Cantidad , Subtotal = @Subtotal , FechaCreacion = @FechaCreacion , FechaModificacion = @FechaModificacion"; // Corrección aquí
 
-        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal });
+        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
 
         return result > 0;
     }

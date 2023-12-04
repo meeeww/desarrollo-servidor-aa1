@@ -45,13 +45,13 @@ public class EmpleadosRepository : IEmpleadosRepository
         return await db.QueryAsync<Empleado>(sql, new { });
     }
 
-    public async Task<bool> InsertEmpleado(Empleado Empleados)
+    public async Task<bool> InsertEmpleado(Empleado empleado)
     {
         var db = dbConnection();
 
-        var sql = @"INSERT INTO Empleados (Nombre , Apellido , Cargo , Salario) VALUES (@Nombre , @Apellido , @Cargo , @Salario)";
+        var sql = @"INSERT INTO Empleados (Nombre , Apellido , Cargo , Salario , FechaEntrada , FechaSalida) VALUES (@Nombre , @Apellido , @Cargo , @Salario , @FechaEntrada , @FechaSalida)";
 
-        var result = await db.ExecuteAsync(sql, new { });
+        var result = await db.ExecuteAsync(sql, new { empleado.Nombre, empleado.Apellido, empleado.Cargo, empleado.Salario, empleado.FechaEntrada, empleado.FechaSalida });
 
         return result > 0;
     }
@@ -60,9 +60,9 @@ public class EmpleadosRepository : IEmpleadosRepository
     {
         var db = dbConnection();
 
-        var sql = @"UPDATE Empleados SET Nombre = @Nombre , Apellido = @Apellido , Cargo = @Cargo , Salario = @Salario"; // Corrección aquí
+        var sql = @"UPDATE Empleados SET Nombre = @Nombre , Apellido = @Apellido , Cargo = @Cargo , Salario = @Salario , FechaEntrada = @FechaEntrada , FechaSalida =  @FechaSalida"; // Corrección aquí
 
-        var result = await db.ExecuteAsync(sql, new { empleado.Nombre, empleado.Apellido, empleado.Cargo, empleado.Salario });
+        var result = await db.ExecuteAsync(sql, new { empleado.Nombre, empleado.Apellido, empleado.Cargo, empleado.Salario, empleado.FechaEntrada, empleado.FechaSalida });
 
         return result > 0;
     }
