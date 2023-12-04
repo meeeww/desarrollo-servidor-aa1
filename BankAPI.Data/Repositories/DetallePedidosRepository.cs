@@ -30,7 +30,7 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     {
         var db = dbConnection();
 
-        var sql = @"SELECT * FROM DetalledPedidos WHERE ID_DetallePedido = @Id";
+        var sql = @"SELECT * FROM DetallePedidos WHERE ID_DetallePedido = @Id";
         return await db.QueryFirstOrDefaultAsync(sql, new { Id = id });
     }
 
@@ -38,7 +38,7 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     {
         var db = dbConnection();
 
-        var sql = @"SELECT * FROM DetallePedido";
+        var sql = @"SELECT * FROM DetallePedidos";
 
         return await db.QueryAsync<DetallePedido>(sql, new { });
     }
@@ -46,7 +46,7 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     public async Task<bool> InsertDetallePedido(DetallePedido detallePedido)
     {
         var db = dbConnection();
-        var sql = @"INSERT INTO DetalledPedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal)";
+        var sql = @"INSERT INTO DetallePedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal)";
         var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal });
 
 
