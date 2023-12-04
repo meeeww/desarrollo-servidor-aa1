@@ -1,6 +1,8 @@
-﻿using BankAPI.Data.Services;
+﻿using BankAPI.Data.Repositories;
+using BankAPI.Data.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BankAPI.Controllers
 {
@@ -9,6 +11,7 @@ namespace BankAPI.Controllers
     public class ProductosController : ControllerBase
     {
         private readonly IProductosRepository _productoRepository;
+        Logging logger = new Logging();
 
         public ProductosController(IProductosRepository productoRepository)
         {
@@ -18,49 +21,89 @@ namespace BankAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductos()
         {
-            return Ok(await _productoRepository.GetProductos());
+            try
+            {
+                return Ok(await _productoRepository.GetProductos());
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductoById(int id)
         {
-            return Ok(await _productoRepository.GetProductoById(id));
+            try
+            {
+                return Ok(await _productoRepository.GetProductoById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProducto([FromBody] Producto producto)
         {
-            if (producto == null)
-                return BadRequest();
+            try
+            {
+                if (producto == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var created = await _productoRepository.InsertProducto(producto);
+                var created = await _productoRepository.InsertProducto(producto);
 
-            return Created("creado", created);
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateProducto([FromBody] Producto producto)
         {
-            if (producto == null)
-                return BadRequest();
+            try
+            {
+                if (producto == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            await _productoRepository.UpdateProducto(producto);
+                await _productoRepository.UpdateProducto(producto);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProducto(int id)
         {
-            await _productoRepository.DeleteProducto(new Producto() { ID_Producto = id });
+            try
+            {
+                await _productoRepository.DeleteProducto(new Producto() { ID_Producto = id });
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

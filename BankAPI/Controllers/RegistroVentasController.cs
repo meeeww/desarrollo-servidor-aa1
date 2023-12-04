@@ -9,6 +9,7 @@ namespace BankAPI.Controllers
     public class RegistroVentasController : ControllerBase
     {
         private readonly IRegistroVentasRepository _registroVentasRepository;
+        Logging logger = new Logging();
 
         public RegistroVentasController(IRegistroVentasRepository registroVentasRepository)
         {
@@ -18,55 +19,103 @@ namespace BankAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRegistrosVentas()
         {
-            return Ok(await _registroVentasRepository.GetRegistrosVentas());
+            try
+            {
+                return Ok(await _registroVentasRepository.GetRegistrosVentas());
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("id={id}")]
         public async Task<IActionResult> GetRegistroVentasById(int id)
         {
-            return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+            try
+            {
+                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("idEmpleado={id}")]
         public async Task<IActionResult> GetRegistroVentasByIdEmpleado(int id)
         {
-            return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+            try
+            {
+                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateRegistroVentas([FromBody] RegistroVentas registroVentas)
         {
-            if (registroVentas == null)
-                return BadRequest();
+            try
+            {
+                if (registroVentas == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var created = await _registroVentasRepository.InsertRegistroVentas(registroVentas);
+                var created = await _registroVentasRepository.InsertRegistroVentas(registroVentas);
 
-            return Created("creado", created);
+                return Created("creado", created);
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateRegistroVentas([FromBody] RegistroVentas registroVentas)
         {
-            if (registroVentas == null)
-                return BadRequest();
+            try
+            {
+                if (registroVentas == null)
+                    return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            await _registroVentasRepository.UpdateRegistroVentas(registroVentas);
+                await _registroVentasRepository.UpdateRegistroVentas(registroVentas);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteRegistroVentas(int id)
         {
-            await _registroVentasRepository.DeleteRegistroVentas(new RegistroVentas() { ID_RegistroVentas = id });
+            try
+            {
+                await _registroVentasRepository.DeleteRegistroVentas(new RegistroVentas() { ID_RegistroVentas = id });
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.SaveLog(ex);
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
