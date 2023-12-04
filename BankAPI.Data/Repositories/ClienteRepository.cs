@@ -46,13 +46,13 @@ public class ClienteRepository : IClienteRepository
         return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
     }
 
-    public async Task<IEnumerable<Cliente>> GetClientes()
+    public async Task<IEnumerable<Clientes>> GetClientes()
     {
         var db = dbConnection();
 
         var sql = @"SELECT * FROM Clientes";
 
-        return await db.QueryAsync<Cliente>(sql, new { });
+        return await db.QueryAsync<Clientes>(sql, new { });
     }
 
     public async Task<bool> InsertCliente(Cliente cliente)

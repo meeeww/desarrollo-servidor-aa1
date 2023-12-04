@@ -7,5 +7,7 @@
         public string Apellido { get; set; }
         public string Cargo { get; set; }
         public decimal Salario { get; set; }
+        public DateTime FechaEntrada { get; set; }
+        public DateTime FechaSalida { get; set; }
     }
 }
