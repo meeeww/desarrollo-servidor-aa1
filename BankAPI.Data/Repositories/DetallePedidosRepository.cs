@@ -4,10 +4,10 @@ using Dapper;
 using MySql.Data.MySqlClient;
 namespace BankAPI.Data.Repositories;
 
-public class DetallePedidoRepository : IDetallePedidoRepository
+public class DetallePedidosRepository : IDetallePedidosRepository
 {
     private MySQLConfiguration _connectionString;
-    public DetallePedidoRepository(MySQLConfiguration connectionString)
+    public DetallePedidosRepository(MySQLConfiguration connectionString)
     {
         _connectionString = connectionString;
     }

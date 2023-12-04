@@ -6,11 +6,11 @@ namespace BankAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DetallePedidoController : ControllerBase
+    public class DetallePedidosController : ControllerBase
     {
-        private readonly IDetallePedidoRepository _detallePedidoRepository;
+        private readonly IDetallePedidosRepository _detallePedidoRepository;
 
-        public DetallePedidoController(IDetallePedidoRepository detallePedidoRepository)
+        public DetallePedidosController(IDetallePedidosRepository detallePedidoRepository)
         {
             _detallePedidoRepository = detallePedidoRepository;
         }

@@ -1,6 +1,6 @@
 ﻿namespace BankAPI.Model
 {
-    public class Empleados
+    public class Empleado
     {
         public int ID_Empleado { get; set; }
         public string Nombre { get; set; }

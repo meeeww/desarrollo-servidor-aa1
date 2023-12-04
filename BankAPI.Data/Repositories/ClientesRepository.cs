@@ -5,11 +5,11 @@ using MySql.Data.MySqlClient;
 
 namespace BankAPI.Data.Repositories;
 
-public class ClienteRepository : IClienteRepository
+public class ClientesRepository : IClientesRepository
 {
 
     private MySQLConfiguration _connectionString;
-    public ClienteRepository(MySQLConfiguration connectionString)
+    public ClientesRepository(MySQLConfiguration connectionString)
     {
         _connectionString = connectionString;
     }
@@ -46,13 +46,13 @@ public class ClienteRepository : IClienteRepository
         return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
     }
 
-    public async Task<IEnumerable<Clientes>> GetClientes()
+    public async Task<IEnumerable<Cliente>> GetClientes()
     {
         var db = dbConnection();
 
         var sql = @"SELECT * FROM Clientes";
 
-        return await db.QueryAsync<Clientes>(sql, new { });
+        return await db.QueryAsync<Cliente>(sql, new { });
     }
 
     public async Task<bool> InsertCliente(Cliente cliente)
