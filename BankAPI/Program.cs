@@ -20,7 +20,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PolíticaCORS", app =>
+    options.AddPolicy("PoliticaCORS", app =>
     {
         app.AllowAnyOrigin()
         .AllowAnyHeader() 
@@ -30,11 +30,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Eliminar en producción
+// Eliminar en produccion
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors("PolíticaCORS");
+app.UseCors("Polï¿½ticaCORS");
 
 app.UseHttpsRedirection();
 
