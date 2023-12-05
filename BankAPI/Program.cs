@@ -24,7 +24,7 @@ builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Pol�ticaCORS", app =>
+    options.AddPolicy("PoliticaCORS", app =>
     {
         app.AllowAnyOrigin()
         .AllowAnyHeader()
@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Eliminar en producci�n
+// Eliminar en produccion
 app.UseSwagger();
 app.UseSwaggerUI();
 
