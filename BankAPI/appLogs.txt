@@ -1,0 +1,18 @@
+
+05/12/2023 14:00:30
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
+Line: 24
+
+05/12/2023 14:04:17
+ERROR: Option not supported. (Parameter '212.227.32.40;database')
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
+Line: 24
+
+05/12/2023 14:04:44
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
+Line: 24
