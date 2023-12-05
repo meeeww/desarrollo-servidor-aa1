@@ -16,13 +16,13 @@ public class EmpleadosRepository : IEmpleadosRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public async Task<bool> DeleteEmpleado(Empleado empleado)
+    public async Task<bool> DeleteEmpleado(int id)
     {
         var db = dbConnection();
 
         var sql = @"DELETE FROM Empleados WHERE ID_Empleado = @Id ";
 
-        var result = await db.ExecuteAsync(sql, new { });
+        var result = await db.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -31,7 +31,7 @@ public class EmpleadosRepository : IEmpleadosRepository
     {
         var db = dbConnection();
 
-        var sql = @"SELECT * FROM Empleados WHERE ID_Empleados = @Id";
+        var sql = @"SELECT * FROM Empleados WHERE ID_Empleado = @Id";
 
         return await db.QueryFirstOrDefaultAsync<Empleado>(sql, new { Id = id });
     }

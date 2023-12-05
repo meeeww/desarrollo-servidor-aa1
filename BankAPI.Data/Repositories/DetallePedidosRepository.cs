@@ -15,13 +15,13 @@ public class DetallePedidosRepository : IDetallePedidosRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public async Task<bool> DeleteDetallePedido(DetallePedido detallePedido)
+    public async Task<bool> DeleteDetallePedido(int id)
     {
         var db = dbConnection();
 
         var sql = @"DELETE FROM DetallePedidos WHERE ID_DetallePedido = @Id ";
 
-        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_DetallePedido });
+        var result = await db.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

@@ -17,13 +17,13 @@ public class ClientesRepository : IClientesRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString);
     }
-    public async Task<bool> DeleteCliente(Cliente cliente)
+    public async Task<bool> DeleteCliente(int id)
     {
         var db = dbConnection();
 
         var sql = @"DELETE FROM Clientes WHERE ID_Cliente = @Id ";
 
-        var result = await db.ExecuteAsync(sql, new { cliente.ID_Cliente });
+        var result = await db.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -70,9 +70,9 @@ public class ClientesRepository : IClientesRepository
     {
         var db = dbConnection();
 
-        var sql = @"UPDATE Clientes SET Nombre = @Nombre , Apellido = @Apellido , Email = @Email , Telefono = @Telefono , Direccion = @Direccion"; // Corrección aquí
+        var sql = @"UPDATE Clientes SET Nombre = @Nombre , Apellido = @Apellido , Email = @Email , Telefono = @Telefono , Direccion = @Direccion where ID_Cliente = @ID_Cliente"; // Corrección aquí
 
-        var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
+        var result = await db.ExecuteAsync(sql, new { cliente.ID_Cliente, cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
 
         return result > 0;
     }

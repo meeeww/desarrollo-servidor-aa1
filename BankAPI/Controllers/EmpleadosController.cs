@@ -98,7 +98,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _empleadoRepository.DeleteEmpleado(new Empleado() { ID_Empleado = id });
+                await _empleadoRepository.DeleteEmpleado(id);
 
                 return NoContent();
             }

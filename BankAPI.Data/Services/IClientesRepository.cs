@@ -7,5 +7,5 @@ public interface IClientesRepository
     Task<Cliente> GetClienteByEmail(string email);
     Task<bool> InsertCliente(Cliente cliente);
     Task<bool> UpdateCliente(Cliente cliente);
-    Task<bool> DeleteCliente(Cliente cliente);
+    Task<bool> DeleteCliente(int id);
 }

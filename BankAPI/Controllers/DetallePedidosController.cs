@@ -89,7 +89,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _detallePedidoRepository.DeleteDetallePedido(new DetallePedido() { ID_DetallePedido = id });
+                await _detallePedidoRepository.DeleteDetallePedido(id);
 
                 return NoContent();
             }
