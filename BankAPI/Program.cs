@@ -1,7 +1,6 @@
 using BankAPI.Data;
 using BankAPI.Data.Repositories;
 using BankAPI.Data.Services;
-using MySql.Data.MySqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +15,19 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
+builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
+builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
+builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
+builder.Services.AddScoped<IDetallePedidosRepository, DetallePedidosRepository>();
+builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PoliticaCORS", app =>
     {
         app.AllowAnyOrigin()
-        .AllowAnyHeader() 
+        .AllowAnyHeader()
         .AllowAnyMethod();
     });
 });
