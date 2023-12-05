@@ -45,7 +45,7 @@ namespace BankAPI.Controllers
             }
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("email={email}")]
         public async Task<IActionResult> GetClienteByEmail(string email)
         {
             try
@@ -106,11 +106,11 @@ namespace BankAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePedido(int id)
+        public async Task<IActionResult> DeleteCliente(int id)
         {
             try
             {
-                await _clienteRepository.DeleteCliente(new Cliente() { ID_Cliente = id });
+                await _clienteRepository.DeleteCliente(id);
 
                 return NoContent();
             }
