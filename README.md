@@ -36,7 +36,7 @@ docker pull zaaask/bankapi
 ```
 
 ```bash
-docker run -p 6949:80 zaaask/bankapi
+docker run -p 6949:80 --name apientornoservidor -v datosserver:/BankAPI -e STRING_CONEXION="212.227.32.40;database=api_clase;uid=root;password=8m!25i!17I" zaaask/bankapi
 ```
 
 http://localhost:6949/swagger/index.html
