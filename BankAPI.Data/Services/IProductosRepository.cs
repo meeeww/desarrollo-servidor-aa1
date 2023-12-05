@@ -7,5 +7,5 @@ public interface IProductosRepository
     Task<Producto> GetProductoById(int id);
     Task<bool> InsertProducto(Producto producto);
     Task<bool> UpdateProducto(Producto producto);
-    Task<bool> DeleteProducto(Producto producto);
+    Task<bool> DeleteProducto(int id);
 }

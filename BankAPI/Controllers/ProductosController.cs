@@ -95,7 +95,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _productoRepository.DeleteProducto(new Producto() { ID_Producto = id });
+                await _productoRepository.DeleteProducto(id);
 
                 return NoContent();
             }

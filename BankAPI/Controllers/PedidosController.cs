@@ -111,7 +111,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _pedidoRepository.DeletePedido(new Pedido() { ID_Pedido = id });
+                await _pedidoRepository.DeletePedido(id);
 
                 return NoContent();
             }

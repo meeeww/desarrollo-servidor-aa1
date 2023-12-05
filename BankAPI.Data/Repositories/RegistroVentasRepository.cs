@@ -68,13 +68,13 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> DeleteRegistroVentas(RegistroVentas registroVentas)
+        public async Task<bool> DeleteRegistroVentas(int id)
         {
             var db = dbConnection();
 
-            var sql = @"DELETE FROM RegistroVentas WHERE ID_RegistroVentas = @ID_RegistroVentas";
+            var sql = @"DELETE FROM RegistroVentas WHERE ID_RegistroVentas = @Id";
 
-            var result = await db.ExecuteAsync(sql, new { registroVentas.ID_RegistroVentas });
+            var result = await db.ExecuteAsync(sql, new { Id = id });
 
             return result > 0;
         }

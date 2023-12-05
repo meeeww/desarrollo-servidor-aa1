@@ -9,6 +9,6 @@ namespace BankAPI.Data.Services
         Task<Pedido> GetPedidoByDate(DateTime fecha);
         Task<bool> InsertPedido(Pedido pedido);
         Task<bool> UpdatePedido(Pedido pedido);
-        Task<bool> DeletePedido(Pedido pedido);
+        Task<bool> DeletePedido(int id);
     }
 }

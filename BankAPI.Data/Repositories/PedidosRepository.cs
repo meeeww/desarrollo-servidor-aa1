@@ -87,13 +87,13 @@ namespace BankAPI.Data.Repositories
             return result > 0;
         }
 
-        public async Task<bool> DeletePedido(Pedido pedido)
+        public async Task<bool> DeletePedido(int id)
         {
             var db = dbConnection();
 
             var sql = @"DELETE FROM Pedidos WHERE ID_Pedido = @Id";
 
-            var result = await db.ExecuteAsync(sql, new { Id = pedido.ID_Pedido });
+            var result = await db.ExecuteAsync(sql, new { Id = id });
 
             return result > 0;
         }
