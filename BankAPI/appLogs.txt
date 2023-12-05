@@ -16,3 +16,15 @@ ERROR: Unable to connect to any of the specified MySQL hosts.
 Function: MoveNext
 File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
 Line: 24
+
+05/12/2023 15:11:09
+ERROR: Cannot add or update a child row: a foreign key constraint fails (`api_clase`.`RegistroVentas`, CONSTRAINT `FK_ID_Empleado` FOREIGN KEY (`ID_Empleado`) REFERENCES `Empleados` (`ID_Empleado`))
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\RegistroVentasController.cs
+Line: 72
+
+05/12/2023 15:11:27
+ERROR: Cannot add or update a child row: a foreign key constraint fails (`api_clase`.`RegistroVentas`, CONSTRAINT `FK_ID_Empleado` FOREIGN KEY (`ID_Empleado`) REFERENCES `Empleados` (`ID_Empleado`))
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\RegistroVentasController.cs
+Line: 94

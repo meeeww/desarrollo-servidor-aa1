@@ -9,6 +9,6 @@ namespace BankAPI.Data.Services
         Task<RegistroVentas> GetRegistroVentasByIdEmpleado(int id);
         Task<bool> InsertRegistroVentas(RegistroVentas registroVentas);
         Task<bool> UpdateRegistroVentas(RegistroVentas registroVentas);
-        Task<bool> DeleteRegistroVentas(RegistroVentas registroVentas);
+        Task<bool> DeleteRegistroVentas(int id);
     }
 }

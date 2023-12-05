@@ -107,7 +107,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _registroVentasRepository.DeleteRegistroVentas(new RegistroVentas() { ID_RegistroVentas = id });
+                await _registroVentasRepository.DeleteRegistroVentas(id);
 
                 return NoContent();
             }
