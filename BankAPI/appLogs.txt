@@ -28,3 +28,9 @@ ERROR: Cannot add or update a child row: a foreign key constraint fails (`api_cl
 Function: MoveNext
 File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\RegistroVentasController.cs
 Line: 94
+
+13/12/2023 18:03:01
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
+Line: 24
