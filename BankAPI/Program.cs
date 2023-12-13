@@ -1,14 +1,23 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using BankAPI.Data;
 using BankAPI.Data.Repositories;
 using BankAPI.Data.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]));
+var secretKey = new byte[32]; // 256 bits
+
+var rng = new RNGCryptoServiceProvider();
+rng.GetBytes(secretKey);
+var secretKeyBase64 = Convert.ToBase64String(secretKey);
+
+// Usa la clave secreta para firmar el token
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKeyBase64));
 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 var token = new JwtSecurityToken(
     issuer: builder.Configuration["Jwt:Issuer"],
@@ -18,8 +27,12 @@ var token = new JwtSecurityToken(
 
 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
+// Guarda la clave secreta y el token en la configuración
+builder.Configuration["Jwt:Key"] = secretKeyBase64;
 builder.Configuration["Jwt:Token"] = tokenString;
-System.Console.WriteLine(tokenString);
+
+System.Console.WriteLine($"Secret Key: {secretKeyBase64}");
+System.Console.WriteLine($"Token: {tokenString}");
 
 builder.Services.AddControllers();
 
@@ -27,7 +40,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+    // Configura Swagger para usar el esquema de seguridad JWT
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
 
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
@@ -65,9 +103,9 @@ builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PoliticaCORS", app =>
+    options.AddDefaultPolicy(builder =>
     {
-        app.AllowAnyOrigin()
+        builder.AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -75,19 +113,27 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+}
+
+app.UseRouting();
+
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Eliminar en produccion
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.UseCors("Pol�ticaCORS");
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
