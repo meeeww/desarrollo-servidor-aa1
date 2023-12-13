@@ -1,11 +1,13 @@
 using BankAPI.Data.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmpleadosController : ControllerBase
     {
         private readonly IEmpleadosRepository _empleadoRepository;

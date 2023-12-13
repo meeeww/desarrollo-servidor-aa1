@@ -1,8 +1,25 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using BankAPI.Data;
 using BankAPI.Data.Repositories;
 using BankAPI.Data.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]));
+var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+var token = new JwtSecurityToken(
+    issuer: builder.Configuration["Jwt:Issuer"],
+    audience: builder.Configuration["Jwt:Audience"],
+    expires: DateTime.Now.AddYears(1),
+    signingCredentials: creds);
+
+var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+builder.Configuration["Jwt:Token"] = tokenString;
+System.Console.WriteLine(tokenString);
 
 builder.Services.AddControllers();
 
@@ -14,6 +31,30 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
+
+// Agrega servicios al contenedor.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            // Asegura que el token de la solicitud coincida con el token estático
+            LifetimeValidator = (before, expires, token, parameters) =>
+            {
+                var jwtToken = token as JwtSecurityToken;
+                return jwtToken != null && jwtToken.RawData.Equals(builder.Configuration["Jwt:Token"]);
+            }
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
@@ -33,6 +74,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Eliminar en produccion
 app.UseSwagger();
