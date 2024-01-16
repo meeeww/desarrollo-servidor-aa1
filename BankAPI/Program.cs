@@ -1,6 +1,6 @@
 using BankAPI.Data;
-using BankAPI.Data.Repositories;
-using BankAPI.Data.Services;
+using BankAPI.Repositories;
+using BankAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,9 +1,10 @@
-using BankAPI.Data.Services;
+using BankAPI.Services;
 using BankAPI.Model;
+using BankAPI.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace BankAPI.Data.Repositories;
+namespace BankAPI.Repositories;
 
 public class ClientesRepository : IClientesRepository
 {

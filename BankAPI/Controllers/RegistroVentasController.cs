@@ -1,4 +1,4 @@
-﻿using BankAPI.Data.Services;
+﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 
