@@ -1,6 +1,7 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -35,7 +36,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                if (registroVentas == null)
+                {
+                    return NotFound();
+                }
+                return Ok(registroVentas);
             }
             catch (Exception ex)
             {
@@ -49,7 +55,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                if (registroVentas == null)
+                {
+                    return NotFound();
+                }
+                return Ok(registroVentas);
             }
             catch (Exception ex)
             {

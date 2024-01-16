@@ -1,6 +1,7 @@
 using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -28,7 +29,12 @@ namespace BankAPI.Controllers
 
             try
             {
-                return Ok(await _detallePedidoRepository.GetDetallePedidoById(id));
+                var detallePedido = await _detallePedidoRepository.GetDetallePedidoById(id);
+                if (detallePedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(detallePedido);
             }
             catch (Exception ex)
             {

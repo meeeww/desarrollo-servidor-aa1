@@ -34,3 +34,9 @@ ERROR: Unable to connect to any of the specified MySQL hosts.
 Function: MoveNext
 File: C:\Users\juan7\Documents\san_valero\entornoservidor\api\desarrolloservidoraa1\BankAPI\Controllers\ClientesController.cs
 Line: 24
+
+16/01/2024 18:23:25
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\zas\Documents\san_valero\desarrollo-servidor-aa1\BankAPI\Controllers\ClientesController.cs
+Line: 24

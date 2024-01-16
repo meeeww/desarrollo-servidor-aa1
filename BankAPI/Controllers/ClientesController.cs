@@ -35,7 +35,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _clienteRepository.GetClienteById(id));
+                var cliente = await _clienteRepository.GetClienteById(id);
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cliente);
 
             }
             catch (Exception ex)
@@ -50,7 +55,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _clienteRepository.GetClienteByEmail(email));
+                var cliente = await _clienteRepository.GetClienteByEmail(email);
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cliente);
 
             }
             catch (Exception ex)
