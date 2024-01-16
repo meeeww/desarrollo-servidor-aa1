@@ -1,6 +1,6 @@
 ﻿using BankAPI.Model;
 
-namespace BankAPI.Data.Services
+namespace BankAPI.Services
 {
     public interface IEmpleadosRepository
     {

@@ -1,9 +1,9 @@
-﻿using BankAPI.Data.Repositories;
-using BankAPI.Data.Services;
+﻿using BankAPI.Services;
 using BankAPI.Model;
 using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -39,7 +39,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _productoRepository.GetProductoById(id));
+                var producto = await _productoRepository.GetProductoById(id);
+                if (producto == null)
+                {
+                    return NotFound();
+                }
+                return Ok(producto);
             }
             catch (Exception ex)
             {

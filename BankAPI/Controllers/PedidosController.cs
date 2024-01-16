@@ -1,8 +1,8 @@
-﻿using BankAPI.Data.Repositories;
-using BankAPI.Data.Services;
+﻿using BankAPI.Services;
 using BankAPI.Model;
 using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -38,7 +38,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _pedidoRepository.GetPedidoById(id));
+                var pedido = await _pedidoRepository.GetPedidoById(id);
+                if (pedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pedido);
             }
             catch (Exception ex)
             {
@@ -55,7 +60,12 @@ namespace BankAPI.Controllers
                 if (!DateTime.TryParse(fecha, out DateTime parsedDate))
                     return BadRequest("Invalid date format");
 
-                return Ok(await _pedidoRepository.GetPedidoByDate(parsedDate));
+                var pedido = await _pedidoRepository.GetPedidoByDate(parsedDate);
+                if (pedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pedido);
             }
             catch (Exception ex)
             {
