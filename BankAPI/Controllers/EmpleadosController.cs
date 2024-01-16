@@ -1,5 +1,6 @@
 using BankAPI.Services;
 using BankAPI.Model;
+using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using BankAPI.Repositories;
 
@@ -10,11 +11,12 @@ namespace BankAPI.Controllers
     public class EmpleadosController : ControllerBase
     {
         private readonly IEmpleadosRepository _empleadoRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public EmpleadosController(IEmpleadosRepository empleadoRepository)
+        public EmpleadosController(IEmpleadosRepository empleadoRepository, ILoggingRepository logger)
         {
             _empleadoRepository = empleadoRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -27,7 +29,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -47,7 +49,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -70,7 +72,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -93,7 +95,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -110,7 +112,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

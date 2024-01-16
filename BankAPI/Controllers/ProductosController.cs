@@ -1,5 +1,6 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
+using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BankAPI.Repositories;
@@ -11,11 +12,12 @@ namespace BankAPI.Controllers
     public class ProductosController : ControllerBase
     {
         private readonly IProductosRepository _productoRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public ProductosController(IProductosRepository productoRepository)
+        public ProductosController(IProductosRepository productoRepository, ILoggingRepository logger)
         {
             _productoRepository = productoRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -27,7 +29,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -46,7 +48,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -68,7 +70,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -90,7 +92,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -106,7 +108,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

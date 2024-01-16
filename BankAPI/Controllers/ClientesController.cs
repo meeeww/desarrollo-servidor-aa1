@@ -1,5 +1,6 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
+using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankAPI.Controllers
@@ -9,11 +10,12 @@ namespace BankAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IClientesRepository _clienteRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public ClientesController(IClientesRepository clienteRepository)
+        public ClientesController(IClientesRepository clienteRepository, ILoggingRepository logger)
         {
             _clienteRepository = clienteRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -25,7 +27,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -45,7 +47,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -65,7 +67,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -88,7 +90,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -110,7 +112,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -126,7 +128,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

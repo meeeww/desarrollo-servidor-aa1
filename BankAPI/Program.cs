@@ -1,6 +1,8 @@
+using BankAPI;
 using BankAPI.Data;
 using BankAPI.Repositories;
 using BankAPI.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
 builder.Services.AddScoped<IDetallePedidosRepository, DetallePedidosRepository>();
 builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
+builder.Services.AddScoped<ILoggingRepository, Logging>();
 
 builder.Services.AddCors(options =>
 {
