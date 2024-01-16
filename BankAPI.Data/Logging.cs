@@ -1,14 +1,15 @@
 ﻿using System.Diagnostics;
+using BankAPI.Service;
 
 namespace BankAPI
 {
-    public class Logging
+    public class Logging : ILoggingRepository
     {
         public Logging() { }
 
         public void SaveLog(Exception exception)
         {
-            string route= "appLogs.txt";
+            string route = "appLogs.txt";
             using (StreamWriter writer = new StreamWriter(route, true))
             {
                 writer.WriteLine("");
