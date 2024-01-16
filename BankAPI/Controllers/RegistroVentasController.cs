@@ -1,6 +1,5 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
-using BankAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using BankAPI.Repositories;
 

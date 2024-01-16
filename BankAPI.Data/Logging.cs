@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using BankAPI.Service;
+using BankAPI.Services;
 
 namespace BankAPI
 {
