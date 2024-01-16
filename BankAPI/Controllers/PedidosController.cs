@@ -1,7 +1,7 @@
-﻿using BankAPI.Data.Repositories;
-using BankAPI.Data.Services;
+﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -10,11 +10,12 @@ namespace BankAPI.Controllers
     public class PedidosController : ControllerBase
     {
         private readonly IPedidosRepository _pedidoRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public PedidosController(IPedidosRepository pedidoRepository)
+        public PedidosController(IPedidosRepository pedidoRepository, ILoggingRepository logger)
         {
             _pedidoRepository = pedidoRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -26,7 +27,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -36,11 +37,16 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _pedidoRepository.GetPedidoById(id));
+                var pedido = await _pedidoRepository.GetPedidoById(id);
+                if (pedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pedido);
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -53,11 +59,16 @@ namespace BankAPI.Controllers
                 if (!DateTime.TryParse(fecha, out DateTime parsedDate))
                     return BadRequest("Invalid date format");
 
-                return Ok(await _pedidoRepository.GetPedidoByDate(parsedDate));
+                var pedido = await _pedidoRepository.GetPedidoByDate(parsedDate);
+                if (pedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pedido);
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -79,7 +90,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -101,7 +112,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -117,7 +128,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

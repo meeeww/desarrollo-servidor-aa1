@@ -1,6 +1,7 @@
-﻿using BankAPI.Data.Services;
+﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -9,11 +10,12 @@ namespace BankAPI.Controllers
     public class RegistroVentasController : ControllerBase
     {
         private readonly IRegistroVentasRepository _registroVentasRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public RegistroVentasController(IRegistroVentasRepository registroVentasRepository)
+        public RegistroVentasController(IRegistroVentasRepository registroVentasRepository, ILoggingRepository logger)
         {
             _registroVentasRepository = registroVentasRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -25,7 +27,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -35,11 +37,16 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                if (registroVentas == null)
+                {
+                    return NotFound();
+                }
+                return Ok(registroVentas);
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -49,11 +56,16 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _registroVentasRepository.GetRegistroVentasById(id));
+                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                if (registroVentas == null)
+                {
+                    return NotFound();
+                }
+                return Ok(registroVentas);
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -75,7 +87,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -97,7 +109,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -113,7 +125,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

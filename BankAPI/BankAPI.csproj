@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BankAPI.Data\BankAPI.Data.csproj" />
     <ProjectReference Include="..\BankAPI.Model\BankAPI.Model.csproj" />
+    <ProjectReference Include="..\BankAPI.Service\BankAPI.Service.csproj" />
   </ItemGroup>
 
 </Project>

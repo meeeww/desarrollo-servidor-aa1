@@ -1,6 +1,7 @@
-using BankAPI.Data.Services;
+using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Repositories;
 
 namespace BankAPI.Controllers
 {
@@ -9,11 +10,12 @@ namespace BankAPI.Controllers
     public class DetallePedidosController : ControllerBase
     {
         private readonly IDetallePedidosRepository _detallePedidoRepository;
-        Logging logger = new Logging();
+        private readonly ILoggingRepository _logger;
 
-        public DetallePedidosController(IDetallePedidosRepository detallePedidoRepository)
+        public DetallePedidosController(IDetallePedidosRepository detallePedidoRepository, ILoggingRepository logger)
         {
             _detallePedidoRepository = detallePedidoRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -28,11 +30,16 @@ namespace BankAPI.Controllers
 
             try
             {
-                return Ok(await _detallePedidoRepository.GetDetallePedidoById(id));
+                var detallePedido = await _detallePedidoRepository.GetDetallePedidoById(id);
+                if (detallePedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(detallePedido);
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -55,7 +62,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -78,7 +85,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -95,7 +102,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.SaveLog(ex);
+                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
