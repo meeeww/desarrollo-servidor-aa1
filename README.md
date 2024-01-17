@@ -40,16 +40,20 @@ docker pull zaaask/bankapi
 ```
 
 ```bash
-docker run -p 6949:80 --name apientornoservidor -v datosserver:/BankAPI -e STRING_CONEXION="212.227.32.40;database=api_clase;uid=root;password=8m!25i!17I" zaaask/bankapi
+docker run -d -p 6949:80 --name bankapi -v datosapi:/app/ -e STRING_CONEXION="server=mysqlapi;database=api_clase;uid=root;password=bbddpruebas" --network=api bankapi
 ```
 
 # Creación de la base de datos
+```bash
+docker network create api
+```
+
 ```bash
 docker pull mysql
 ```
 
 ```bash
-docker run --name some-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=bbddpruebas -d mysql
+docker run --name mysqlapi -p 3306:3306 -e MYSQL_ROOT_PASSWORD=bbddpruebas -d mysql
 ```
 
 Para crear el esquema y las tablas, referir a  BBDD.md
