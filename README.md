@@ -52,6 +52,8 @@ docker network create api
 docker run --name mysqlapi -p 3306:3306 -e MYSQL_ROOT_PASSWORD=bbddpruebas -d --network=api mysql -v bbdd:/app/
 ```
 
+Para crearlo automáticamente con docker compose, escribir 'docker-compose up' en la consola donde se encuentre el archivo docker-compose.yml
+
 Para crear el esquema y las tablas, referir a  BBDD.md
 
 http://localhost:6949/swagger/index.html
