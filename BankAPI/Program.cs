@@ -23,6 +23,12 @@ builder.Services.AddSingleton(new MySQLConfiguration(connectionString));
 //builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
 builder.Services.AddScoped<ClientesService>();
+builder.Services.AddScoped<DetallePedidosService>();
+builder.Services.AddScoped<EmpleadosService>();
+builder.Services.AddScoped<LogginService>();
+builder.Services.AddScoped<PedidosService>();
+builder.Services.AddScoped<ProductosService>();
+builder.Services.AddScoped<RegistroVentasService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
