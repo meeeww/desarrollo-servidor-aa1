@@ -1,7 +1,7 @@
 using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Repositories;
+using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,12 +9,12 @@ namespace BankAPI.Controllers
     [ApiController]
     public class EmpleadosController : ControllerBase
     {
-        private readonly IEmpleadosRepository _empleadoRepository;
+        private readonly EmpleadosService _empleadosService;
         private readonly ILoggingRepository _logger;
 
-        public EmpleadosController(IEmpleadosRepository empleadoRepository, ILoggingRepository logger)
+        public EmpleadosController(EmpleadosService empleadosService, ILoggingRepository logger)
         {
-            _empleadoRepository = empleadoRepository;
+            _empleadosService = empleadosService;
             _logger = logger;
         }
 
@@ -24,7 +24,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                return Ok(await _empleadoRepository.GetEmpleados());
+                return Ok(await _empleadosService.GetEmpleados());
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                var empleado = await _empleadoRepository.GetEmpleadoById(id);
+                var empleado = await _empleadosService.GetEmpleadoById(id);
                 if (empleado == null)
                 {
                     return NotFound();
@@ -65,7 +65,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _empleadoRepository.InsertEmpleado(empleado);
+                var created = await _empleadosService.InsertEmpleado(empleado);
 
                 return Created("creado", created);
             }
@@ -88,7 +88,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _empleadoRepository.UpdateEmpleado(empleado);
+                await _empleadosService.UpdateEmpleado(empleado);
 
                 return NoContent();
             }
@@ -105,7 +105,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _empleadoRepository.DeleteEmpleado(id);
+                await _empleadosService.DeleteEmpleado(id);
 
                 return NoContent();
             }

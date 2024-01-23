@@ -1,6 +1,7 @@
-﻿using BankAPI.Services;
-using BankAPI.Model;
+﻿using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using BankAPI.Data;
+using BankAPI.Services;
 
 namespace BankAPI.Controllers
 {
@@ -8,12 +9,12 @@ namespace BankAPI.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly IClientesRepository _clienteRepository;
+        private readonly ClientesService _clientesService;
         private readonly ILoggingRepository _logger;
 
-        public ClientesController(IClientesRepository clienteRepository, ILoggingRepository logger)
+        public ClientesController(ClientesService clientesService, ILoggingRepository logger)
         {
-            _clienteRepository = clienteRepository;
+            _clientesService = clientesService;
             _logger = logger;
         }
 
@@ -22,7 +23,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _clienteRepository.GetClientes());
+                return Ok(await _clientesService.GetClientes());
             }
             catch (Exception ex)
             {
@@ -36,7 +37,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var cliente = await _clienteRepository.GetClienteById(id);
+                var cliente = await _clientesService.GetClienteById(id);
                 if (cliente == null)
                 {
                     return NotFound();
@@ -56,7 +57,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var cliente = await _clienteRepository.GetClienteByEmail(email);
+                var cliente = await _clientesService.GetClienteByEmail(email);
                 if (cliente == null)
                 {
                     return NotFound();
@@ -83,7 +84,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _clienteRepository.InsertCliente(cliente);
+                var created = await _clientesService.InsertCliente(cliente);
 
                 return Created("creado", created);
             }
@@ -105,7 +106,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _clienteRepository.UpdateCliente(cliente);
+                await _clientesService.UpdateCliente(cliente);
 
                 return NoContent();
             }
@@ -121,7 +122,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _clienteRepository.DeleteCliente(id);
+                await _clientesService.DeleteCliente(id);
 
                 return NoContent();
             }

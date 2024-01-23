@@ -1,6 +1,6 @@
 using BankAPI;
 using BankAPI.Data;
-using BankAPI.Repositories;
+using BankAPI.Data;
 using BankAPI.Services;
 
 
@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(c =>
 //var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
 builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
-
+builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
