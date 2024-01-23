@@ -3,3 +3,4 @@ obj
 .vs
 appsettings.json
 appLogs.txt
+datos_mysql

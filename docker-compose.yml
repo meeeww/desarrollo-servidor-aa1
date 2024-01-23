@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  api:
+    image: bankapi:latest
+    container_name: bankapi_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6949:80"
+    environment:
+      - STRING_CONEXION=server=mysqlapi;database=api_clase;uid=root;password=bbddpruebas
+
+  mysql:
+    image: mysql:8.3
+    container_name: mysqlapi
+    environment:
+      - MYSQL_ROOT_PASSWORD=bbddpruebas
+      - MYSQL_DATABASE=api_clase
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./datos_mysql:/var/lib/mysql
