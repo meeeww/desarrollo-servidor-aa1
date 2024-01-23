@@ -4,3 +4,4 @@ obj
 appsettings.json
 appLogs.txt
 datos_mysql
+.env
