@@ -8,8 +8,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "6949:80"
-    environment:
-      - STRING_CONEXION=server=mysqlapi;database=api_clase;uid=root;password=bbddpruebas
+    env_file:
+      - .env
 
   mysql:
     image: mysql:8.3
