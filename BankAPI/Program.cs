@@ -15,8 +15,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
 });
 
-//var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
-builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
+// las siguientes lineas se descomentan para produccion en docker
+var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
+builder.Services.AddSingleton(new MySQLConfiguration(connectionString));
+
+// la siguiente línea es para desarrollo
+//builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
 
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
