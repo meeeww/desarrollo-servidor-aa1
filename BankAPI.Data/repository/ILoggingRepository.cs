@@ -1,4 +1,4 @@
-namespace BankAPI.Services;
+namespace BankAPI.Data;
 
 public interface ILoggingRepository
 {

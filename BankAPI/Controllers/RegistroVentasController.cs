@@ -1,7 +1,7 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Repositories;
+using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,12 +9,12 @@ namespace BankAPI.Controllers
     [ApiController]
     public class RegistroVentasController : ControllerBase
     {
-        private readonly IRegistroVentasRepository _registroVentasRepository;
+        private readonly RegistroVentasService _registroVentasService;
         private readonly ILoggingRepository _logger;
 
-        public RegistroVentasController(IRegistroVentasRepository registroVentasRepository, ILoggingRepository logger)
+        public RegistroVentasController(RegistroVentasService registroVentasService, ILoggingRepository logger)
         {
-            _registroVentasRepository = registroVentasRepository;
+            _registroVentasService = registroVentasService;
             _logger = logger;
         }
 
@@ -23,7 +23,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _registroVentasRepository.GetRegistrosVentas());
+                return Ok(await _registroVentasService.GetRegistrosVentas());
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
                 if (registroVentas == null)
                 {
                     return NotFound();
@@ -56,7 +56,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var registroVentas = await _registroVentasRepository.GetRegistroVentasById(id);
+                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
                 if (registroVentas == null)
                 {
                     return NotFound();
@@ -81,7 +81,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _registroVentasRepository.InsertRegistroVentas(registroVentas);
+                var created = await _registroVentasService.InsertRegistroVentas(registroVentas);
 
                 return Created("creado", created);
             }
@@ -103,7 +103,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _registroVentasRepository.UpdateRegistroVentas(registroVentas);
+                await _registroVentasService.UpdateRegistroVentas(registroVentas);
 
                 return NoContent();
             }
@@ -119,7 +119,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _registroVentasRepository.DeleteRegistroVentas(id);
+                await _registroVentasService.DeleteRegistroVentas(id);
 
                 return NoContent();
             }

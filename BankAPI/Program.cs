@@ -1,6 +1,6 @@
 using BankAPI;
 using BankAPI.Data;
-using BankAPI.Repositories;
+using BankAPI.Data;
 using BankAPI.Services;
 
 
@@ -22,7 +22,7 @@ builder.Services.AddSingleton(new MySQLConfiguration(connectionString));
 // la siguiente línea es para desarrollo
 //builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
-
+builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
