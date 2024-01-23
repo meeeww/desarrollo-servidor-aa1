@@ -1,7 +1,7 @@
 using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Repositories;
+using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,19 +9,19 @@ namespace BankAPI.Controllers
     [ApiController]
     public class DetallePedidosController : ControllerBase
     {
-        private readonly IDetallePedidosRepository _detallePedidoRepository;
+        private readonly DetallePedidosService _detallePedidosService;
         private readonly ILoggingRepository _logger;
 
-        public DetallePedidosController(IDetallePedidosRepository detallePedidoRepository, ILoggingRepository logger)
+        public DetallePedidosController(DetallePedidosService detallePedidosService, ILoggingRepository logger)
         {
-            _detallePedidoRepository = detallePedidoRepository;
+            _detallePedidosService = detallePedidosService;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDetallesPedido()
         {
-            return Ok(await _detallePedidoRepository.GetDetallesPedido());
+            return Ok(await _detallePedidosService.GetDetallesPedido());
         }
 
         [HttpGet("{id}")]
@@ -30,7 +30,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                var detallePedido = await _detallePedidoRepository.GetDetallePedidoById(id);
+                var detallePedido = await _detallePedidosService.GetDetallePedidoById(id);
                 if (detallePedido == null)
                 {
                     return NotFound();
@@ -56,7 +56,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _detallePedidoRepository.InsertDetallePedido(detallePedido);
+                var created = await _detallePedidosService.InsertDetallePedido(detallePedido);
 
                 return Created("creado", created);
             }
@@ -79,7 +79,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _detallePedidoRepository.UpdateDetallePedido(detallePedido);
+                await _detallePedidosService.UpdateDetallePedido(detallePedido);
 
                 return NoContent();
             }
@@ -96,7 +96,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _detallePedidoRepository.DeleteDetallePedido(id);
+                await _detallePedidosService.DeleteDetallePedido(id);
 
                 return NoContent();
             }

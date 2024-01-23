@@ -1,6 +1,6 @@
 using BankAPI;
 using BankAPI.Data;
-using BankAPI.Repositories;
+using BankAPI.Data;
 using BankAPI.Services;
 
 
@@ -15,10 +15,20 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
 });
 
-//var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
-builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
+// las siguientes lineas se descomentan para produccion en docker
+var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
+builder.Services.AddSingleton(new MySQLConfiguration(connectionString));
 
+// la siguiente línea es para desarrollo
+//builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
+builder.Services.AddScoped<ClientesService>();
+builder.Services.AddScoped<DetallePedidosService>();
+builder.Services.AddScoped<EmpleadosService>();
+builder.Services.AddScoped<LogginService>();
+builder.Services.AddScoped<PedidosService>();
+builder.Services.AddScoped<ProductosService>();
+builder.Services.AddScoped<RegistroVentasService>();
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();

@@ -1,7 +1,7 @@
 ﻿using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Repositories;
+using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,12 +9,12 @@ namespace BankAPI.Controllers
     [ApiController]
     public class PedidosController : ControllerBase
     {
-        private readonly IPedidosRepository _pedidoRepository;
+        private readonly PedidosService _pedidosService;
         private readonly ILoggingRepository _logger;
 
-        public PedidosController(IPedidosRepository pedidoRepository, ILoggingRepository logger)
+        public PedidosController(PedidosService pedidosService, ILoggingRepository logger)
         {
-            _pedidoRepository = pedidoRepository;
+            _pedidosService = pedidosService;
             _logger = logger;
         }
 
@@ -23,7 +23,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _pedidoRepository.GetPedidos());
+                return Ok(await _pedidosService.GetPedidos());
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var pedido = await _pedidoRepository.GetPedidoById(id);
+                var pedido = await _pedidosService.GetPedidoById(id);
                 if (pedido == null)
                 {
                     return NotFound();
@@ -59,7 +59,7 @@ namespace BankAPI.Controllers
                 if (!DateTime.TryParse(fecha, out DateTime parsedDate))
                     return BadRequest("Invalid date format");
 
-                var pedido = await _pedidoRepository.GetPedidoByDate(parsedDate);
+                var pedido = await _pedidosService.GetPedidoByDate(parsedDate);
                 if (pedido == null)
                 {
                     return NotFound();
@@ -84,7 +84,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _pedidoRepository.InsertPedido(pedido);
+                var created = await _pedidosService.InsertPedido(pedido);
 
                 return Created("creado", created);
             }
@@ -106,7 +106,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _pedidoRepository.UpdatePedido(pedido);
+                await _pedidosService.UpdatePedido(pedido);
 
                 return NoContent();
             }
@@ -122,7 +122,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _pedidoRepository.DeletePedido(id);
+                await _pedidosService.DeletePedido(id);
 
                 return NoContent();
             }

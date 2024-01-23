@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankAPI.Model\BankAPI.Model.csproj" />
-    <ProjectReference Include="..\BankAPI.Service\BankAPI.Service.csproj" />
   </ItemGroup>
 
 </Project>

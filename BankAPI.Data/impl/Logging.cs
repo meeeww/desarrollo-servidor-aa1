@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
-using BankAPI.Services;
 
-namespace BankAPI
+namespace BankAPI.Data
 {
     public class Logging : ILoggingRepository
     {

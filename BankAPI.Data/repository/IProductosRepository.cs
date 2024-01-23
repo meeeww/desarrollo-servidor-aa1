@@ -1,6 +1,6 @@
 using BankAPI.Model;
 
-namespace BankAPI.Services
+namespace BankAPI.Data
 {
     public interface IProductosRepository
     {

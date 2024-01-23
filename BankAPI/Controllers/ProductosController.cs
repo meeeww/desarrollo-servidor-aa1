@@ -2,7 +2,7 @@
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using BankAPI.Repositories;
+using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -10,12 +10,12 @@ namespace BankAPI.Controllers
     [ApiController]
     public class ProductosController : ControllerBase
     {
-        private readonly IProductosRepository _productoRepository;
+        private readonly ProductosService _productosService;
         private readonly ILoggingRepository _logger;
 
-        public ProductosController(IProductosRepository productoRepository, ILoggingRepository logger)
+        public ProductosController(ProductosService productosService, ILoggingRepository logger)
         {
-            _productoRepository = productoRepository;
+            _productosService = productosService;
             _logger = logger;
         }
 
@@ -24,7 +24,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _productoRepository.GetProductos());
+                return Ok(await _productosService.GetProductos());
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var producto = await _productoRepository.GetProductoById(id);
+                var producto = await _productosService.GetProductoById(id);
                 if (producto == null)
                 {
                     return NotFound();
@@ -63,7 +63,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _productoRepository.InsertProducto(producto);
+                var created = await _productosService.InsertProducto(producto);
 
                 return Created("creado", created);
             }
@@ -85,7 +85,7 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _productoRepository.UpdateProducto(producto);
+                await _productosService.UpdateProducto(producto);
 
                 return NoContent();
             }
@@ -101,7 +101,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _productoRepository.DeleteProducto(id);
+                await _productosService.DeleteProducto(id);
 
                 return NoContent();
             }
