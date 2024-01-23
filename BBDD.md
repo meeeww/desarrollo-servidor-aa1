@@ -1,7 +1,3 @@
-CREATE SCHEMA api_clase;
-
-USE api_clase;
-
 CREATE TABLE `Clientes` (
   `ID_Cliente` int NOT NULL,
   `Nombre` varchar(32) NOT NULL,
