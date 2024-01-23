@@ -49,11 +49,7 @@ docker network create api
 ```
 
 ```bash
-docker pull mysql
-```
-
-```bash
-docker run --name mysqlapi -p 3306:3306 -e MYSQL_ROOT_PASSWORD=bbddpruebas -d --network=api mysql
+docker run --name mysqlapi -p 3306:3306 -e MYSQL_ROOT_PASSWORD=bbddpruebas -d --network=api mysql -v bbdd:/app/
 ```
 
 Para crear el esquema y las tablas, referir a  BBDD.md
