@@ -14,7 +14,7 @@ docker volume create datosapi
 ```
 
 ```bash
-docker run -d -p 6949:80 --name bankapi -v datosapi:/app/ -e STRING_CONEXION="server=212.227.32.40;database=api_clase;uid=root;password=8m!25i!17I" bankapi    
+docker run -d -p 6949:80 --name bankapi -v datosapi:/app/ -e STRING_CONEXION="server=mysqlapi;database=api_clase;uid=root;password=bbddpruebas" --network=api bankapi
 ```
 
 # Publicación del contenedor
