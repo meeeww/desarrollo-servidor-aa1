@@ -1,65 +1,71 @@
 using BankAPI.Model;
 using Dapper;
-using MySql.Data.MySqlClient;
+using System.Data;
+using System.Data.SqlClient;
 
-namespace BankAPI.Data;
-
-public class DetallePedidosRepository : IDetallePedidosRepository
+namespace BankAPI.Data
 {
-    private MySQLConfiguration _connectionString;
-    public DetallePedidosRepository(MySQLConfiguration connectionString)
+    public class DetallePedidosRepository : IDetallePedidosRepository
     {
-        _connectionString = connectionString;
-    }
-    protected MySqlConnection dbConnection()
-    {
-        return new MySqlConnection(_connectionString.ConnectionString);
-    }
-    public async Task<bool> DeleteDetallePedido(int id)
-    {
-        var db = dbConnection();
+        private readonly IDbConnection _dbConnection;
 
-        var sql = @"DELETE FROM DetallePedidos WHERE ID_DetallePedido = @Id ";
+        public DetallePedidosRepository()
+        {
+            var dbConfig = new DBConfiguration();
+            _dbConnection = dbConfig.ConnectionType;
+        }
 
-        var result = await db.ExecuteAsync(sql, new { Id = id });
+        protected IDbConnection dbConnection()
+        {
+            return _dbConnection;
+        }
 
-        return result > 0;
-    }
+        public async Task<bool> DeleteDetallePedido(int id)
+        {
+            var db = dbConnection();
 
-    public async Task<DetallePedido> GetDetallePedidoById(int id)
-    {
-        var db = dbConnection();
+            var sql = @"DELETE FROM DetallePedidos WHERE ID_DetallePedido = @Id ";
 
-        var sql = @"SELECT * FROM DetallePedidos WHERE ID_DetallePedido = @Id";
-        return await db.QueryFirstOrDefaultAsync(sql, new { Id = id });
-    }
+            var result = await db.ExecuteAsync(sql, new { Id = id });
 
-    public async Task<IEnumerable<DetallePedido>> GetDetallesPedido()
-    {
-        var db = dbConnection();
+            return result > 0;
+        }
 
-        var sql = @"SELECT * FROM DetallePedidos";
+        public async Task<DetallePedido> GetDetallePedidoById(int id)
+        {
+            var db = dbConnection();
 
-        return await db.QueryAsync<DetallePedido>(sql, new { });
-    }
+            var sql = @"SELECT * FROM DetallePedidos WHERE ID_DetallePedido = @Id";
+            return await db.QueryFirstOrDefaultAsync(sql, new { Id = id });
+        }
 
-    public async Task<bool> InsertDetallePedido(DetallePedido detallePedido)
-    {
-        var db = dbConnection();
-        var sql = @"INSERT INTO DetallePedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal, FechaCreacion , FechaModificacion) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal , @FechaCreacion, @FechaModificacion)";
-        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
+        public async Task<IEnumerable<DetallePedido>> GetDetallesPedido()
+        {
+            var db = dbConnection();
 
-        return result > 0;
-    }
+            var sql = @"SELECT * FROM DetallePedidos";
 
-    public async Task<bool> UpdateDetallePedido(DetallePedido detallePedido)
-    {
-        var db = dbConnection();
+            return await db.QueryAsync<DetallePedido>(sql, new { });
+        }
 
-        var sql = @"UPDATE DetallePedidos SET ID_Pedido  = @ID_Pedido , ID_Producto  = @ID_Producto , Cantidad = @Cantidad , Subtotal = @Subtotal , FechaCreacion = @FechaCreacion , FechaModificacion = @FechaModificacion"; // Corrección aquí
+        public async Task<bool> InsertDetallePedido(DetallePedido detallePedido)
+        {
+            var db = dbConnection();
+            var sql = @"INSERT INTO DetallePedidos (ID_Pedido , ID_Producto , Cantidad , Subtotal, FechaCreacion , FechaModificacion) VALUES (@ID_Pedido , @ID_Producto , @Cantidad , @Subtotal , @FechaCreacion, @FechaModificacion)";
+            var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
 
-        var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
+            return result > 0;
+        }
 
-        return result > 0;
+        public async Task<bool> UpdateDetallePedido(DetallePedido detallePedido)
+        {
+            var db = dbConnection();
+
+            var sql = @"UPDATE DetallePedidos SET ID_Pedido  = @ID_Pedido , ID_Producto  = @ID_Producto , Cantidad = @Cantidad , Subtotal = @Subtotal , FechaCreacion = @FechaCreacion , FechaModificacion = @FechaModificacion"; // Corrección aquí
+
+            var result = await db.ExecuteAsync(sql, new { detallePedido.ID_Pedido, detallePedido.ID_Producto, detallePedido.Cantidad, detallePedido.Subtotal, detallePedido.FechaCreacion, detallePedido.FechaModificacion });
+
+            return result > 0;
+        }
     }
 }
