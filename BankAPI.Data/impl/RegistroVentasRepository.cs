@@ -1,21 +1,23 @@
 ﻿using BankAPI.Model;
 using Dapper;
-using MySql.Data.MySqlClient;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace BankAPI.Data
 {
     public class RegistroVentasRepository : IRegistroVentasRepository
     {
-        private readonly MySQLConfiguration _connectionString;
+        private readonly IDbConnection _dbConnection;
 
-        public RegistroVentasRepository(MySQLConfiguration connectionString)
+        public RegistroVentasRepository()
         {
-            _connectionString = connectionString;
+            var dbConfig = new DBConfiguration();
+            _dbConnection = dbConfig.ConnectionType;
         }
 
-        protected MySqlConnection dbConnection()
+        protected IDbConnection dbConnection()
         {
-            return new MySqlConnection(_connectionString.ConnectionString);
+            return _dbConnection;
         }
 
         public async Task<IEnumerable<RegistroVentas>> GetRegistrosVentas()
