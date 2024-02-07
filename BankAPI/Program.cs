@@ -1,6 +1,7 @@
 using BankAPI;
 using BankAPI.Data;
 using BankAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,7 @@ builder.Services.AddScoped<LogginService>();
 builder.Services.AddScoped<PedidosService>();
 builder.Services.AddScoped<ProductosService>();
 builder.Services.AddScoped<RegistroVentasService>();
-builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
+// builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
@@ -44,6 +45,12 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod();
     });
 });
+
+var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
+
+builder.Services.AddDbContext<BankAPIContext>(options =>
+options.UseSqlServer(connectionString));
+builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
 
 var app = builder.Build();
 

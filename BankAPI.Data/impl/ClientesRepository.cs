@@ -1,84 +1,84 @@
-using BankAPI.Model;
-using Dapper;
-using System.Data;
-using System.Data.SqlClient;
+// using BankAPI.Model;
+// using Dapper;
+// using System.Data;
+// using System.Data.SqlClient;
 
-namespace BankAPI.Data
-{
-    public class ClientesRepository : IClientesRepository
-    {
+// namespace BankAPI.Data
+// {
+//     public class ClientesRepository : IClientesRepository
+//     {
 
-        private readonly IDbConnection _dbConnection;
+//         private readonly IDbConnection _dbConnection;
 
-        public ClientesRepository()
-        {
-            var dbConfig = new DBConfiguration();
-            _dbConnection = dbConfig.ConnectionType;
-        }
+//         public ClientesRepository()
+//         {
+//             var dbConfig = new DBConfiguration();
+//             _dbConnection = dbConfig.ConnectionType;
+//         }
 
-        protected IDbConnection dbConnection()
-        {
-            return _dbConnection;
-        }
+//         protected IDbConnection dbConnection()
+//         {
+//             return _dbConnection;
+//         }
 
-        public async Task<bool> DeleteCliente(int id)
-        {
-            var db = dbConnection();
+//         public async Task<bool> DeleteCliente(int id)
+//         {
+//             var db = dbConnection();
 
-            var sql = @"DELETE FROM Clientes WHERE ID_Cliente = @Id ";
+//             var sql = @"DELETE FROM Clientes WHERE ID_Cliente = @Id ";
 
-            var result = await db.ExecuteAsync(sql, new { Id = id });
+//             var result = await db.ExecuteAsync(sql, new { Id = id });
 
-            return result > 0;
-        }
+//             return result > 0;
+//         }
 
-        public async Task<Cliente> GetClienteByEmail(string email)
-        {
-            var db = dbConnection();
+//         public async Task<Cliente> GetClienteByEmail(string email)
+//         {
+//             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Clientes WHERE Email = @Email";
+//             var sql = @"SELECT * FROM Clientes WHERE Email = @Email";
 
-            return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Email = email });
-        }
+//             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Email = email });
+//         }
 
-        public async Task<Cliente> GetClienteById(int id)
-        {
-            var db = dbConnection();
+//         public async Task<Cliente> GetClienteById(int id)
+//         {
+//             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Clientes WHERE ID_Cliente = @Id";
+//             var sql = @"SELECT * FROM Clientes WHERE ID_Cliente = @Id";
 
-            return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
-        }
+//             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
+//         }
 
-        public async Task<IEnumerable<Cliente>> GetClientes()
-        {
-            var db = dbConnection();
+//         public async Task<IEnumerable<Cliente>> GetClientes()
+//         {
+//             var db = dbConnection();
 
-            var sql = @"SELECT * FROM Clientes";
+//             var sql = @"SELECT * FROM Clientes";
 
-            return await db.QueryAsync<Cliente>(sql, new { });
-        }
+//             return await db.QueryAsync<Cliente>(sql, new { });
+//         }
 
-        public async Task<bool> InsertCliente(Cliente cliente)
-        {
-            var db = dbConnection();
+//         public async Task<bool> InsertCliente(Cliente cliente)
+//         {
+//             var db = dbConnection();
 
-            var sql = @"INSERT INTO Clientes (Nombre , Apellido , Email , Telefono , Direccion) VALUES (@Nombre , @Apellido , @Email , @Telefono , @Direccion) ";
+//             var sql = @"INSERT INTO Clientes (Nombre , Apellido , Email , Telefono , Direccion) VALUES (@Nombre , @Apellido , @Email , @Telefono , @Direccion) ";
 
-            var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
+//             var result = await db.ExecuteAsync(sql, new { cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
 
-            return result > 0;
-        }
+//             return result > 0;
+//         }
 
-        public async Task<bool> UpdateCliente(Cliente cliente)
-        {
-            var db = dbConnection();
+//         public async Task<bool> UpdateCliente(Cliente cliente)
+//         {
+//             var db = dbConnection();
 
-            var sql = @"UPDATE Clientes SET Nombre = @Nombre , Apellido = @Apellido , Email = @Email , Telefono = @Telefono , Direccion = @Direccion where ID_Cliente = @ID_Cliente"; // Corrección aquí
+//             var sql = @"UPDATE Clientes SET Nombre = @Nombre , Apellido = @Apellido , Email = @Email , Telefono = @Telefono , Direccion = @Direccion where ID_Cliente = @ID_Cliente"; // Corrección aquí
 
-            var result = await db.ExecuteAsync(sql, new { cliente.ID_Cliente, cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
+//             var result = await db.ExecuteAsync(sql, new { cliente.ID_Cliente, cliente.Nombre, cliente.Apellido, cliente.Email, cliente.Telefono, cliente.Direccion });
 
-            return result > 0;
-        }
-    }
-}
+//             return result > 0;
+//         }
+//     }
+// }
