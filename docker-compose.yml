@@ -1,8 +1,9 @@
 version: '3.9'
 services:
   api:
-    image: bankapi:latest
     container_name: bankapi_container
+    image: bankapi:latest
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,10 +11,26 @@ services:
       - "6949:80"
     env_file:
       - .env
+    depends_on:
+      - sqlserver
+      - mysql
+
+  sqlserver:
+    container_name: sqlserverapi
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ContraFuerteParaOmarhOO123!!
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./datos_sqlserver/data:/var/opt/mssql/data
 
   mysql:
-    image: mysql:8.3
     container_name: mysqlapi
+    image: mysql:8.3
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=bbddpruebas
       - MYSQL_DATABASE=api_clase
