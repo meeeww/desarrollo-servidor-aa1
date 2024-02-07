@@ -52,3 +52,21 @@ ERROR: Reading from the stream has failed.
 Function: MoveNext
 File: C:\Users\zas\Documents\san_valero\desarrollo-servidor-aa1\BankAPI\Controllers\ClientesController.cs
 Line: 25
+
+24/01/2024 17:41:32
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\zas\Documents\san_valero\desarrollo-servidor-aa1\BankAPI\Controllers\ClientesController.cs
+Line: 26
+
+24/01/2024 18:42:39
+ERROR: The ConnectionString property has not been initialized.
+Function: MoveNext
+File: C:\Users\zas\Documents\san_valero\desarrollo-servidor-aa1\BankAPI\Controllers\ClientesController.cs
+Line: 26
+
+24/01/2024 19:44:50
+ERROR: Unable to connect to any of the specified MySQL hosts.
+Function: MoveNext
+File: C:\Users\zas\Documents\san_valero\desarrollo-servidor-aa1\BankAPI\Controllers\PedidosController.cs
+Line: 26

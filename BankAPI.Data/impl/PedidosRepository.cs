@@ -1,21 +1,26 @@
 ﻿using BankAPI.Model;
+using BankAPI.Data;
 using Dapper;
+using System.Data.Common;
+using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace BankAPI.Data
 {
     public class PedidosRepository : IPedidosRepository
     {
-        private readonly MySQLConfiguration _connectionString;
+        private readonly IDbConnection _dbConnection;
 
-        public PedidosRepository(MySQLConfiguration connectionString)
+        public PedidosRepository()
         {
-            _connectionString = connectionString;
+            var dbConfig = new DBConfiguration();
+            _dbConnection = dbConfig.ConnectionType;
         }
 
-        protected MySqlConnection dbConnection()
+        protected IDbConnection dbConnection()
         {
-            return new MySqlConnection(_connectionString.ConnectionString);
+            return _dbConnection;
         }
 
         public async Task<IEnumerable<Pedido>> GetPedidos()

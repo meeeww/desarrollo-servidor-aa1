@@ -1,6 +1,5 @@
 using BankAPI;
 using BankAPI.Data;
-using BankAPI.Data;
 using BankAPI.Services;
 
 
@@ -16,8 +15,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // las siguientes lineas se descomentan para produccion en docker
-var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
-builder.Services.AddSingleton(new MySQLConfiguration(connectionString));
+builder.Services.AddSingleton(new DBConfiguration());
 
 // la siguiente línea es para desarrollo
 //builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
