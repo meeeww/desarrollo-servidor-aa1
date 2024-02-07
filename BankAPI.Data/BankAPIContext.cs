@@ -3,9 +3,9 @@ using BankAPI.Model;
 
 namespace BankAPI.Data;
 
-public class BankAppContext : DbContext
+public class BankAPIContext : DbContext
 {
-    public BankAppContext(DbContextOptions<BankAppContext> options)
+    public BankAPIContext(DbContextOptions<BankAPIContext> options)
         : base(options)
     {
 

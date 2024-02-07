@@ -4,11 +4,11 @@ namespace BankAPI.Data
 {
     public interface IClientesRepository
     {
-        Task<IEnumerable<Cliente>> GetClientes();
-        Task<Cliente> GetClienteById(int id);
-        Task<Cliente> GetClienteByEmail(string email);
-        Task<bool> InsertCliente(Cliente cliente);
-        Task<bool> UpdateCliente(Cliente cliente);
-        Task<bool> DeleteCliente(int id);
+        List<Cliente> GetClientes();
+        Cliente GetClienteById(int id);
+        Cliente GetClienteByEmail(string email);
+        void InsertCliente(Cliente cliente);
+        void UpdateCliente(Cliente cliente);
+        void DeleteCliente(int id);
     }
 }

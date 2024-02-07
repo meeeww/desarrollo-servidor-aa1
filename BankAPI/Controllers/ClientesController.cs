@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BankAPI.Data;
 using BankAPI.Services;
+using System.ComponentModel;
 
 namespace BankAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetClientes()
+        public async Task<IEnumerable<Cliente>> GetClientes()
         {
             try
             {
