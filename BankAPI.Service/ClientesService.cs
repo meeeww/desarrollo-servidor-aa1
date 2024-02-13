@@ -5,9 +5,9 @@ namespace BankAPI.Services
 {
     public class ClientesService
     {
-        private readonly EfClientesRepository _clientesRepository;
+        private readonly IClientesRepository _clientesRepository;
 
-        public ClientesService(EfClientesRepository clientesRepository)
+        public ClientesService(IClientesRepository clientesRepository)
         {
             _clientesRepository = clientesRepository;
         }
