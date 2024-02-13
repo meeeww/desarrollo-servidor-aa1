@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSingleton(new DBConfiguration());
 
 // la siguiente línea es para desarrollo
-//builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
+// builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
 builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<DetallePedidosService>();
@@ -46,7 +46,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION");
+var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
 
 builder.Services.AddDbContext<BankAPIContext>(options =>
 options.UseSqlServer(connectionString));
