@@ -11,5 +11,7 @@ namespace BankAPI.Model
         public int TotalVentas { get; set; }
         public int TotalCostos { get; set; }
         public int TotalImpuestos { get; set; }
+
+        public virtual Empleado Empleado { get; set; }
     }
 }

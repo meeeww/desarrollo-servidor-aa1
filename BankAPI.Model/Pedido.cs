@@ -11,5 +11,8 @@ namespace BankAPI.Model
         public decimal Total { get; set; }
         public bool Enviado { get; set; }
         public string MetodoPago { get; set; }
+
+        public virtual Cliente Cliente { get; set; }
+        public virtual ICollection<DetallePedido> DetallePedidos { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace BankAPI.Model
         public decimal Precio { get; set; }
         public int Stock { get; set; }
         public string Imagen { get; set; }
+
+        public virtual ICollection<DetallePedido> DetallePedidos { get; set; }
     }
 }
