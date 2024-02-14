@@ -7,7 +7,7 @@ public class BankAPIContext : DbContext
         : base(options)
     {
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -20,9 +20,9 @@ public class BankAPIContext : DbContext
         modelBuilder.Entity<DetallePedido>()
           .Property(p => p.Subtotal);
 
-        modelBuilder.Entity<Empleado>()
-         .Property(p => p.Salario)
-         .HasColumnType("decimal(18,2)");
+          modelBuilder.Entity<Empleado>()
+           .Property(p => p.Salario)
+           .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<Pedido>()
            .Property(p => p.Total).HasColumnType("decimal(18,2)");
