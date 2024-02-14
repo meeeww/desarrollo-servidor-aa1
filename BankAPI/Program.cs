@@ -18,7 +18,7 @@ if (databaseType == "MYSQL")
 {
     //var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
     //builder.Services.AddDbContext<BankAPIContext>(options =>
-        //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 }
 else if (databaseType == "SQLSERVER")
 {
@@ -32,7 +32,9 @@ else
 }
 
 builder.Services.AddScoped<ClientesService>();
+builder.Services.AddScoped<DetallePedidosService>();
 builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
+builder.Services.AddScoped<IDetallePedidosRepository, EfDetallePedidos>();
 
 var app = builder.Build();
 

@@ -10,18 +10,16 @@ namespace BankAPI.Controllers
     public class DetallePedidosController : ControllerBase
     {
         private readonly DetallePedidosService _detallePedidosService;
-        private readonly ILoggingRepository _logger;
 
-        public DetallePedidosController(DetallePedidosService detallePedidosService, ILoggingRepository logger)
+        public DetallePedidosController(DetallePedidosService detallePedidosService)
         {
             _detallePedidosService = detallePedidosService;
-            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDetallesPedido()
         {
-            return Ok(await _detallePedidosService.GetDetallesPedido());
+            return Ok(_detallePedidosService.GetDetallesPedido());
         }
 
         [HttpGet("{id}")]
@@ -30,7 +28,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                var detallePedido = await _detallePedidosService.GetDetallePedidoById(id);
+                var detallePedido = _detallePedidosService.GetDetallePedidoById(id);
                 if (detallePedido == null)
                 {
                     return NotFound();
@@ -39,7 +37,6 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -56,13 +53,12 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _detallePedidosService.InsertDetallePedido(detallePedido);
+                var created = _detallePedidosService.InsertDetallePedido(detallePedido);
 
                 return Created("creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -79,13 +75,12 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _detallePedidosService.UpdateDetallePedido(detallePedido);
+                _detallePedidosService.UpdateDetallePedido(detallePedido);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -96,13 +91,12 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _detallePedidosService.DeleteDetallePedido(id);
+                _detallePedidosService.DeleteDetallePedido(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
