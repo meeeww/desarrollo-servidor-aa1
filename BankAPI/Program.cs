@@ -22,8 +22,7 @@ builder.Services.AddSingleton(new DBConfiguration());
 // builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
 
 
-var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
-builder.Services.AddDbContext<BankAPIContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<DetallePedidosService>();
 builder.Services.AddScoped<EmpleadosService>();
@@ -31,8 +30,6 @@ builder.Services.AddScoped<LogginService>();
 builder.Services.AddScoped<PedidosService>();
 builder.Services.AddScoped<ProductosService>();
 builder.Services.AddScoped<RegistroVentasService>();
-builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
-
 // builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
@@ -50,6 +47,10 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod();
     });
 });
+
+var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
+builder.Services.AddDbContext<BankAPIContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
 
 
 var app = builder.Build();
