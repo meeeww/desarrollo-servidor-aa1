@@ -12,24 +12,25 @@ public class DetallePedidosService
         _detallePedidoRepository = detallePedidosRepository;
     }
 
-    public Task<IEnumerable<DetallePedido>> GetDetallesPedido()
+    public List<DetallePedido> GetDetallesPedido()
     {
         return _detallePedidoRepository.GetDetallesPedido();
     }
-    public Task<DetallePedido> GetDetallePedidoById(int id)
+    public DetallePedido GetDetallePedidoById(int id)
     {
         return _detallePedidoRepository.GetDetallePedidoById(id);
     }
-    public Task<bool> InsertDetallePedido(DetallePedido detallePedido)
+    public DetallePedido InsertDetallePedido(DetallePedido detallePedido)
     {
-        return _detallePedidoRepository.InsertDetallePedido(detallePedido);
+        _detallePedidoRepository.InsertDetallePedido(detallePedido);
+        return detallePedido;
     }
-    public Task<bool> UpdateDetallePedido(DetallePedido detallePedido)
+    public void UpdateDetallePedido(DetallePedido detallePedido)
     {
-        return _detallePedidoRepository.UpdateDetallePedido(detallePedido);
+        _detallePedidoRepository.UpdateDetallePedido(detallePedido);
     }
-    public Task<bool> DeleteDetallePedido(int id)
+    public void DeleteDetallePedido(int id)
     {
-        return _detallePedidoRepository.DeleteDetallePedido(id);
+        _detallePedidoRepository.DeleteDetallePedido(id);
     }
 }
