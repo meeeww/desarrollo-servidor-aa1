@@ -24,7 +24,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener los clientes." });
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
             }
         }
 

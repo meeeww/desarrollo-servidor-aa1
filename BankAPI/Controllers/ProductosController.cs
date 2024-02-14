@@ -1,8 +1,6 @@
-﻿using BankAPI.Services;
-using BankAPI.Model;
+﻿using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -11,49 +9,46 @@ namespace BankAPI.Controllers
     public class ProductosController : ControllerBase
     {
         private readonly ProductosService _productosService;
-        private readonly ILoggingRepository _logger;
 
-        public ProductosController(ProductosService productosService, ILoggingRepository logger)
+        public ProductosController(ProductosService productosService)
         {
             _productosService = productosService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductos()
+        public IActionResult GetProductos()
         {
             try
             {
-                return Ok(await _productosService.GetProductos());
+                return Ok(_productosService.GetProductos());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los productos." });
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductoById(int id)
+        public IActionResult GetProductoById(int id)
         {
             try
             {
-                var producto = await _productosService.GetProductoById(id);
-                if (producto == null)
+                var cliente = _productosService.GetProductoById(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(producto);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el producto." });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProducto([FromBody] Producto producto)
+        public IActionResult InsertProducto([FromBody] Producto producto)
         {
             try
             {
@@ -63,19 +58,18 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _productosService.InsertProducto(producto);
+                var created = _productosService.InsertProducto(producto);
 
-                return Created("creado", created);
+                return Created("Creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProducto([FromBody] Producto producto)
+        public IActionResult UpdateProducto([FromBody] Producto producto)
         {
             try
             {
@@ -85,29 +79,27 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _productosService.UpdateProducto(producto);
+                _productosService.UpdateProducto(producto);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducto(int id)
+        public IActionResult DeleteProducto(int id)
         {
             try
             {
-                await _productosService.DeleteProducto(id);
+                _productosService.DeleteProducto(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
