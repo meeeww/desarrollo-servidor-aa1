@@ -24,7 +24,8 @@ else if (databaseType == "SQLSERVER")
 {
     var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_SQLSERVER");
     builder.Services.AddDbContext<BankAPIContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
+
 }
 else
 {
@@ -33,6 +34,8 @@ else
 
 builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
+builder.Services.AddScoped<ProductosService>();
+builder.Services.AddScoped<IProductosRepository, EfProductosRepository>();
 
 var app = builder.Build();
 
