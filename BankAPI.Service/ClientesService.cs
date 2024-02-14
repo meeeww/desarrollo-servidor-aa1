@@ -27,9 +27,11 @@ namespace BankAPI.Services
             return _clientesRepository.GetClienteByEmail(email);
         }
 
-        public void InsertCliente(Cliente cliente)
+        public Cliente InsertCliente(Cliente cliente)
         {
             _clientesRepository.InsertCliente(cliente);
+
+            return cliente;
         }
 
         public void UpdateCliente(Cliente cliente)
