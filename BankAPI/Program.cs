@@ -36,6 +36,8 @@ builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
 builder.Services.AddScoped<ProductosService>();
 builder.Services.AddScoped<IProductosRepository, EfProductosRepository>();
+builder.Services.AddScoped<RegistroVentasService>();
+builder.Services.AddScoped<IRegistroVentasRepository, EfRegistroVentasRepository>();
 
 var app = builder.Build();
 

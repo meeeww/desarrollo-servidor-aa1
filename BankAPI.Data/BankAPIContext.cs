@@ -37,6 +37,6 @@ public class BankAPIContext : DbContext
     public DbSet<Empleado> Empleados { get; set; }
     public DbSet<Pedido> Pedidos { get; set; }
     public DbSet<Producto> Productos { get; set; }
-    public DbSet<RegistroVentas> RegistrosVentas { get; set; }
+    public DbSet<RegistroVentas> RegistroVentas { get; set; }
 
 }
