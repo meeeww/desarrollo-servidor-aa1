@@ -11,12 +11,10 @@ namespace BankAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly ClientesService _clientesService;
-        private readonly ILoggingRepository _logger;
 
-        public ClientesController(ClientesService clientesService, ILoggingRepository logger)
+        public ClientesController(ClientesService clientesService)
         {
             _clientesService = clientesService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -28,8 +26,12 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex);
+                // Log the exception details for debugging purposes
+                // Consider using a logging framework or service
+                Console.WriteLine(ex); // Or use a more sophisticated logging solution
+
+                // Return a more generic error message
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes." });
             }
         }
 

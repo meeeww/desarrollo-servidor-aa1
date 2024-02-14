@@ -15,17 +15,28 @@ public class BankAPIContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Ejemplo de configuración para la entidad Cliente
         modelBuilder.Entity<Cliente>(entity =>
         {
             entity.HasKey(e => e.ID_Cliente);
             entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Email).HasMaxLength(100);
-            // Agregar más configuraciones según sea necesario
         });
 
-        // Configuraciones adicionales para otras entidades
-        // Repetir el patrón para DetallePedidos, Empleados, Pedidos, Productos, RegistrosVentas, etc.
+        modelBuilder.Entity<DetallePedido>()
+           .Property(p => p.Subtotal)
+           .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Empleado>()
+           .Property(p => p.Salario)
+           .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Pedido>()
+            .Property(p => p.Total)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Producto>()
+            .Property(p => p.Precio)
+            .HasColumnType("decimal(18,2)");
     }
 
 
