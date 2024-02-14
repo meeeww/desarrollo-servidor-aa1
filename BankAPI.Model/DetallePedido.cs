@@ -1,7 +1,10 @@
-﻿namespace BankAPI.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BankAPI.Model
 {
     public class DetallePedido
     {
+        [Key]
         public int ID_DetallePedido { get; set; }
         public int ID_Pedido { get; set; }
         public int ID_Producto { get; set; }
@@ -9,5 +12,9 @@
         public decimal Subtotal { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
+
+        public virtual Pedido Pedido { get; set; }
+        public virtual Producto Producto { get; set; }
+
     }
 }

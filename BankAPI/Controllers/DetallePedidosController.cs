@@ -1,108 +1,106 @@
-using BankAPI.Services;
-using BankAPI.Model;
-using Microsoft.AspNetCore.Mvc;
 using BankAPI.Data;
+using BankAPI.Model;
+using BankAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BankAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DetallePedidosController : ControllerBase
+    public class DetallePedidosService : ControllerBase
     {
         private readonly DetallePedidosService _detallePedidosService;
-        private readonly ILoggingRepository _logger;
 
-        public DetallePedidosController(DetallePedidosService detallePedidosService, ILoggingRepository logger)
+        public DetallePedidosService(DetallePedidosService detallePedidosService)
         {
             _detallePedidosService = detallePedidosService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDetallesPedido()
+        public IActionResult GetDetallePedidos()
         {
-            return Ok(await _detallePedidosService.GetDetallesPedido());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDetallePedidoById(int id)
-        {
-
             try
             {
-                var detallePedido = await _detallePedidosService.GetDetallePedidoById(id);
-                if (detallePedido == null)
-                {
-                    return NotFound();
-                }
-                return Ok(detallePedido);
+                return Ok(_detallePedidosService.GetDetallePedidos());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los registro de ventas." });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetDetallePedidosById(int id)
+        {
+            try
+            {
+                var cliente = _detallePedidosService.GetDetallePedidosById(id);
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cliente);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Ocurrió un error al obtener el registro de venta." });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertDetallePedido([FromBody] DetallePedido detallePedido)
+        public IActionResult InsertDetallePedidos([FromBody] DetallePedido detallePedidosService)
         {
-
             try
             {
-                if (detallePedido == null)
+                if (detallePedidosService == null)
                     return BadRequest();
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _detallePedidosService.InsertDetallePedido(detallePedido);
+                var created = _detallePedidosService.InsertDetallePedidos(detallePedidosService);
 
-                return Created("creado", created);
+                return Created("Creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateDetallePedido([FromBody] DetallePedido detallePedido)
+        public IActionResult UpdateDetallePedidos([FromBody] DetallePedido detallePedidosService)
         {
-
             try
             {
-                if (detallePedido == null)
+                if (detallePedidosService == null)
                     return BadRequest();
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _detallePedidosService.UpdateDetallePedido(detallePedido);
+                _detallePedidosService.UpdateDetallePedidos(detallePedidosService);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetallePedido(int id)
+        public IActionResult DeleteDetallePedidos(int id)
         {
-
             try
             {
-                await _detallePedidosService.DeleteDetallePedido(id);
+                _detallePedidosService.DeleteDetallePedidos(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

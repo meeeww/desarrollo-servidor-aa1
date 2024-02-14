@@ -4,11 +4,11 @@ namespace BankAPI.Data
 {
     public interface IRegistroVentasRepository
     {
-        Task<IEnumerable<RegistroVentas>> GetRegistrosVentas();
-        Task<RegistroVentas> GetRegistroVentasById(int id);
-        Task<RegistroVentas> GetRegistroVentasByIdEmpleado(int id);
-        Task<bool> InsertRegistroVentas(RegistroVentas registroVentas);
-        Task<bool> UpdateRegistroVentas(RegistroVentas registroVentas);
-        Task<bool> DeleteRegistroVentas(int id);
+        List<RegistroVentas> GetRegistrosVentas();
+        RegistroVentas GetRegistroVentasById(int id);
+        RegistroVentas GetRegistroVentasByIdEmpleado(int id);
+        void InsertRegistroVentas(RegistroVentas registroVentas);
+        void UpdateRegistroVentas(RegistroVentas registroVentas);
+        void DeleteRegistroVentas(int id);
     }
 }

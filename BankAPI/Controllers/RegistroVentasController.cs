@@ -1,7 +1,6 @@
-﻿using BankAPI.Services;
-using BankAPI.Model;
+﻿using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -10,122 +9,116 @@ namespace BankAPI.Controllers
     public class RegistroVentasController : ControllerBase
     {
         private readonly RegistroVentasService _registroVentasService;
-        private readonly ILoggingRepository _logger;
 
-        public RegistroVentasController(RegistroVentasService registroVentasService, ILoggingRepository logger)
+        public RegistroVentasController(RegistroVentasService registroVentasService)
         {
             _registroVentasService = registroVentasService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRegistrosVentas()
+        public IActionResult GetRegistroVentas()
         {
             try
             {
-                return Ok(await _registroVentasService.GetRegistrosVentas());
+                return Ok(_registroVentasService.GetRegistrosVentas());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los registro de ventas." });
             }
         }
 
-        [HttpGet("id={id}")]
-        public async Task<IActionResult> GetRegistroVentasById(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetRegistroVentasById(int id)
         {
             try
             {
-                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
-                if (registroVentas == null)
+                var cliente = _registroVentasService.GetRegistroVentasById(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(registroVentas);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el registro de venta." });
             }
         }
 
-        [HttpGet("idEmpleado={id}")]
-        public async Task<IActionResult> GetRegistroVentasByIdEmpleado(int id)
+        [HttpGet("empleado={id}")]
+        public IActionResult GetRegistroVentasByIdEmpleado(int id)
         {
             try
             {
-                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
-                if (registroVentas == null)
+                var cliente = _registroVentasService.GetRegistroVentasByIdEmpleado(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(registroVentas);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el registro de venta." });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRegistroVentas([FromBody] RegistroVentas registroVentas)
+        public IActionResult InsertRegistroVentas([FromBody] RegistroVentas registroVentasService)
         {
             try
             {
-                if (registroVentas == null)
+                if (registroVentasService == null)
                     return BadRequest();
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _registroVentasService.InsertRegistroVentas(registroVentas);
+                var created = _registroVentasService.InsertRegistroVentas(registroVentasService);
 
-                return Created("creado", created);
+                return Created("Creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRegistroVentas([FromBody] RegistroVentas registroVentas)
+        public IActionResult UpdateRegistroVentas([FromBody] RegistroVentas registroVentasService)
         {
             try
             {
-                if (registroVentas == null)
+                if (registroVentasService == null)
                     return BadRequest();
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _registroVentasService.UpdateRegistroVentas(registroVentas);
+                _registroVentasService.UpdateRegistroVentas(registroVentasService);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteRegistroVentas(int id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteRegistroVentas(int id)
         {
             try
             {
-                await _registroVentasService.DeleteRegistroVentas(id);
+                _registroVentasService.DeleteRegistroVentas(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
