@@ -1,7 +1,6 @@
 ﻿using BankAPI.Model;
-using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
 using BankAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BankAPI.Controllers
 {
@@ -10,127 +9,119 @@ namespace BankAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly ClientesService _clientesService;
-        private readonly ILoggingRepository _logger;
 
-        public ClientesController(ClientesService clientesService, ILoggingRepository logger)
+        public ClientesController(ClientesService clientesService)
         {
             _clientesService = clientesService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetClientes()
+        public IActionResult GetClientes()
         {
             try
             {
-                return Ok(await _clientesService.GetClientes());
+                return Ok(_clientesService.GetClientes());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes." });
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetClienteById(int id)
-        {
-            try
-            {
-                var cliente = await _clientesService.GetClienteById(id);
-                if (cliente == null)
-                {
-                    return NotFound();
-                }
-                return Ok(cliente);
+         [HttpGet("{id}")]
+         public IActionResult GetClienteById(int id)
+         {
+             try
+             {
+                 var cliente = _clientesService.GetClienteById(id);
+                 if (cliente == null)
+                 {
+                     return NotFound();
+                 }
+                 return Ok(cliente);
 
-            }
-            catch (Exception ex)
-            {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
-            }
-        }
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(new { message = "Ocurrió un error al obtener los clientes." });
+             }
+         }
 
-        [HttpGet("email={email}")]
-        public async Task<IActionResult> GetClienteByEmail(string email)
-        {
-            try
-            {
-                var cliente = await _clientesService.GetClienteByEmail(email);
-                if (cliente == null)
-                {
-                    return NotFound();
-                }
-                return Ok(cliente);
+         [HttpGet("email={email}")]
+         public IActionResult GetClienteByEmail(string email)
+         {
+             try
+             {
+                 var cliente = _clientesService.GetClienteByEmail(email);
+                 if (cliente == null)
+                 {
+                     return NotFound();
+                 }
+                 return Ok(cliente);
 
-            }
-            catch (Exception ex)
-            {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
-            }
-        }
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(ex.Message);
+             }
+         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> InsertCliente([FromBody] Cliente cliente)
-        {
-            try
-            {
-                if (cliente == null)
-                    return BadRequest();
+         [HttpPost]
+         public IActionResult InsertCliente([FromBody] Cliente cliente)
+         {
+             try
+             {
+                 if (cliente == null)
+                     return BadRequest();
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                 if (!ModelState.IsValid)
+                     return BadRequest(ModelState);
 
-                var created = await _clientesService.InsertCliente(cliente);
+                 var created = _clientesService.InsertCliente(cliente);
 
-                return Created("creado", created);
-            }
-            catch (Exception ex)
-            {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
-            }
-        }
+                 return Created("Creado", created);
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(ex.Message);
+             }
+         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdatePedido([FromBody] Cliente cliente)
-        {
-            try
-            {
-                if (cliente == null)
-                    return BadRequest();
+         [HttpPut]
+         public IActionResult UpdatePedido([FromBody] Cliente cliente)
+         {
+             try
+             {
+                 if (cliente == null)
+                     return BadRequest();
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                 if (!ModelState.IsValid)
+                     return BadRequest(ModelState);
 
-                await _clientesService.UpdateCliente(cliente);
+                 _clientesService.UpdateCliente(cliente);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
-            }
-        }
+                 return NoContent();
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(ex.Message);
+             }
+         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
-        {
-            try
-            {
-                await _clientesService.DeleteCliente(id);
+         [HttpDelete("{id}")]
+         public IActionResult DeleteCliente(int id)
+         {
+             try
+             {
+                 _clientesService.DeleteCliente(id);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
-            }
-        }
+                 return NoContent();
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(ex.Message);
+             }
+         }
     }
 }

@@ -10,9 +10,9 @@ services:
       - "6949:80"
     env_file:
       - .env
-    depends_on:
+    #depends_on:
       # - sqlserver
-      - mysql
+      # - mysql
 
   sqlserver:
     container_name: sqlserverapi

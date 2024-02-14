@@ -12,33 +12,35 @@ namespace BankAPI.Services
             _clientesRepository = clientesRepository;
         }
 
-        public Task<IEnumerable<Cliente>> GetClientes()
+        public List<Cliente> GetClientes()
         {
             return _clientesRepository.GetClientes();
         }
 
-        public Task<Cliente> GetClienteById(int id)
+        public Cliente GetClienteById(int id)
         {
             return _clientesRepository.GetClienteById(id);
         }
 
-        public Task<Cliente> GetClienteByEmail(string email)
+        public Cliente GetClienteByEmail(string email)
         {
             return _clientesRepository.GetClienteByEmail(email);
         }
 
-        public Task<bool> InsertCliente(Cliente cliente)
+        public Cliente InsertCliente(Cliente cliente)
         {
-            return _clientesRepository.InsertCliente(cliente);
+            _clientesRepository.InsertCliente(cliente);
+
+            return cliente;
         }
 
-        public Task<bool> UpdateCliente(Cliente cliente)
+        public void UpdateCliente(Cliente cliente)
         {
-            return _clientesRepository.UpdateCliente(cliente);
+            _clientesRepository.UpdateCliente(cliente);
         }
-        public Task<bool> DeleteCliente(int id)
+        public void DeleteCliente(int id)
         {
-            return _clientesRepository.DeleteCliente(id);
+            _clientesRepository.DeleteCliente(id);
         }
     }
 }

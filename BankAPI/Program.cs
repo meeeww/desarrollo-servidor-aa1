@@ -1,49 +1,38 @@
 using BankAPI;
 using BankAPI.Data;
 using BankAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
 });
 
-// las siguientes lineas se descomentan para produccion en docker
-builder.Services.AddSingleton(new DBConfiguration());
-
-// la siguiente línea es para desarrollo
-//builder.Services.AddSingleton(new MySQLConfiguration(builder.Configuration.GetConnectionString("MySqlConnection")));
+var databaseType = Environment.GetEnvironmentVariable("TIPO_CONEXION");
+if (databaseType == "MYSQL")
+{
+    //var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
+    //builder.Services.AddDbContext<BankAPIContext>(options =>
+        //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+}
+else if (databaseType == "SQLSERVER")
+{
+    var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_SQLSERVER");
+    builder.Services.AddDbContext<BankAPIContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else
+{
+    throw new InvalidOperationException("No se ha configurado un tipo de base de datos válido.");
+}
 
 builder.Services.AddScoped<ClientesService>();
-builder.Services.AddScoped<DetallePedidosService>();
-builder.Services.AddScoped<EmpleadosService>();
-builder.Services.AddScoped<LogginService>();
-builder.Services.AddScoped<PedidosService>();
-builder.Services.AddScoped<ProductosService>();
-builder.Services.AddScoped<RegistroVentasService>();
-builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
-builder.Services.AddScoped<IPedidosRepository, PedidosRepository>();
-builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
-builder.Services.AddScoped<IRegistroVentasRepository, RegistroVentasRepository>();
-builder.Services.AddScoped<IDetallePedidosRepository, DetallePedidosRepository>();
-builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
-builder.Services.AddScoped<ILoggingRepository, Logging>();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("PoliticaCORS", app =>
-    {
-        app.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-    });
-});
+builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
 
 var app = builder.Build();
 
