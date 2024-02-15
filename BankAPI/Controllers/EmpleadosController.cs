@@ -1,7 +1,6 @@
-using BankAPI.Services;
 using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,54 +8,48 @@ namespace BankAPI.Controllers
     [ApiController]
     public class EmpleadosController : ControllerBase
     {
-        private readonly EmpleadosService _empleadosService;
-        private readonly ILoggingRepository _logger;
+        private readonly EmpleadosService _empleadoService;
 
-        public EmpleadosController(EmpleadosService empleadosService, ILoggingRepository logger)
+        public EmpleadosController(EmpleadosService empleadosService)
         {
-            _empleadosService = empleadosService;
-            _logger = logger;
+            _empleadoService = empleadosService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmpleados()
+        public IActionResult GetEmpleados()
         {
-
             try
             {
-                return Ok(await _empleadosService.GetEmpleados());
+                return Ok(_empleadoService.GetEmpleados());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los empleados.", error = ex.ToString() });
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmpleadoById(int id)
+        public IActionResult GetEmpleadoById(int id)
         {
-
             try
             {
-                var empleado = await _empleadosService.GetEmpleadoById(id);
+                var empleado = _empleadoService.GetEmpleadoById(id);
                 if (empleado == null)
                 {
                     return NotFound();
                 }
                 return Ok(empleado);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el empleado." });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertEmpleado([FromBody] Empleado empleado)
+        public IActionResult InsertEmpleado([FromBody] Empleado empleado)
         {
-
             try
             {
                 if (empleado == null)
@@ -65,21 +58,19 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _empleadosService.InsertEmpleado(empleado);
+                var created = _empleadoService.InsertEmpleado(empleado);
 
-                return Created("creado", created);
+                return Created("Creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmpleado([FromBody] Empleado empleado)
+        public IActionResult UpdateEmpleado([FromBody] Empleado empleado)
         {
-
             try
             {
                 if (empleado == null)
@@ -88,30 +79,27 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _empleadosService.UpdateEmpleado(empleado);
+                _empleadoService.UpdateEmpleado(empleado);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmpleado(int id)
+        public IActionResult DeleteEmpleado(int id)
         {
-
             try
             {
-                await _empleadosService.DeleteEmpleado(id);
+                _empleadoService.DeleteEmpleado(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

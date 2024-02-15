@@ -13,33 +13,25 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
 });
 
-var databaseType = Environment.GetEnvironmentVariable("TIPO_CONEXION");
-if (databaseType == "MYSQL")
-{
-    //var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_MYSQL");
-    //builder.Services.AddDbContext<BankAPIContext>(options =>
-    //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-}
-else if (databaseType == "SQLSERVER")
-{
-    var connectionString = Environment.GetEnvironmentVariable("STRING_CONEXION_SQLSERVER");
-    builder.Services.AddDbContext<BankAPIContext>(options =>
-        options.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
+var connectionString = "Server=sqlserverapi,1433;Database=api_clase;User Id=sa;Password=ContraFuerteParaOmarhOO123!!;Encrypt=True;TrustServerCertificate=True;";
+builder.Services.AddDbContext<BankAPIContext>(options =>
+    options.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
 
-}
-else
-{
-    throw new InvalidOperationException("No se ha configurado un tipo de base de datos válido.");
-}
+
 
 builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<DetallePedidosService>();
+builder.Services.AddScoped<EmpleadosService>();
+builder.Services.AddScoped<PedidosService>();
 builder.Services.AddScoped<ProductosService>();
+builder.Services.AddScoped<RegistroVentasService>();
 builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
 builder.Services.AddScoped<IDetallePedidosRepository, EfDetallePedidos>();
+builder.Services.AddScoped<IEmpleadosRepository, EfEmpleadosRepository>();
+builder.Services.AddScoped<IPedidosRepository, EfPedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, EfProductosRepository>();
-builder.Services.AddScoped<RegistroVentasService>();
 builder.Services.AddScoped<IRegistroVentasRepository, EfRegistroVentasRepository>();
+
 
 var app = builder.Build();
 
