@@ -12,29 +12,30 @@ public class PedidosService
         _pedidosRepository = pedidosRepository;
     }
 
-    public Task<IEnumerable<Pedido>> GetPedidos()
+    public List<Pedido> GetPedidos()
     {
         return _pedidosRepository.GetPedidos();
     }
-    public Task<Pedido> GetPedidoById(int id)
+    public Pedido GetPedidoById(int id)
     {
         return _pedidosRepository.GetPedidoById(id);
     }
-    public Task<Pedido> GetPedidoByDate(DateTime fecha)
+    public Pedido GetPedidoByDate(DateTime fecha)
     {
         return _pedidosRepository.GetPedidoByDate(fecha);
     }
-    public Task<bool> InsertPedido(Pedido pedido)
+    public Pedido InsertPedido(Pedido pedido)
     {
-        return _pedidosRepository.InsertPedido(pedido);
+        _pedidosRepository.InsertPedido(pedido);
+        return pedido;
     }
-    public Task<bool> UpdatePedido(Pedido pedido)
+    public void UpdatePedido(Pedido pedido)
     {
-        return _pedidosRepository.UpdatePedido(pedido);
+        _pedidosRepository.UpdatePedido(pedido);
     }
-    public Task<bool> DeletePedido(int id)
+    public void DeletePedido(int id)
     {
-        return _pedidosRepository.DeletePedido(id);
+        _pedidosRepository.DeletePedido(id);
     }
 
 }

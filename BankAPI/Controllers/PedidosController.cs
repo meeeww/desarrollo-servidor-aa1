@@ -10,12 +10,10 @@ namespace BankAPI.Controllers
     public class PedidosController : ControllerBase
     {
         private readonly PedidosService _pedidosService;
-        private readonly ILoggingRepository _logger;
 
-        public PedidosController(PedidosService pedidosService, ILoggingRepository logger)
+        public PedidosController(PedidosService pedidosService)
         {
             _pedidosService = pedidosService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -23,11 +21,10 @@ namespace BankAPI.Controllers
         {
             try
             {
-                return Ok(await _pedidosService.GetPedidos());
+                return Ok(_pedidosService.GetPedidos());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -37,7 +34,7 @@ namespace BankAPI.Controllers
         {
             try
             {
-                var pedido = await _pedidosService.GetPedidoById(id);
+                var pedido = _pedidosService.GetPedidoById(id);
                 if (pedido == null)
                 {
                     return NotFound();
@@ -46,7 +43,6 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -59,7 +55,7 @@ namespace BankAPI.Controllers
                 if (!DateTime.TryParse(fecha, out DateTime parsedDate))
                     return BadRequest("Invalid date format");
 
-                var pedido = await _pedidosService.GetPedidoByDate(parsedDate);
+                var pedido = _pedidosService.GetPedidoByDate(parsedDate);
                 if (pedido == null)
                 {
                     return NotFound();
@@ -68,7 +64,6 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -84,13 +79,12 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var created = await _pedidosService.InsertPedido(pedido);
+                var created = _pedidosService.InsertPedido(pedido);
 
                 return Created("creado", created);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -106,13 +100,12 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _pedidosService.UpdatePedido(pedido);
+                _pedidosService.UpdatePedido(pedido);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -122,13 +115,12 @@ namespace BankAPI.Controllers
         {
             try
             {
-                await _pedidosService.DeletePedido(id);
+                _pedidosService.DeletePedido(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
