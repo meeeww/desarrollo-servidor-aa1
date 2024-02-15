@@ -11,12 +11,10 @@ public class BankAPIContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Cliente>(entity =>
-        {
-            entity.HasKey(e => e.ID_Cliente);
-            entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Email).HasMaxLength(100);
-        });
+        modelBuilder.Entity<Cliente>()
+            .HasMany(c => c.Pedidos)
+            .WithOne(p => p.Cliente)
+            .HasForeignKey(p => p.ID_Cliente);
 
         modelBuilder.Entity<DetallePedido>()
             .HasKey(pi => new { pi.ID_Pedido, pi.ID_Producto });
@@ -42,7 +40,6 @@ public class BankAPIContext : DbContext
             .HasOne(pi => pi.Empleado)
             .WithMany(i => i.RegistroVentas)
             .HasForeignKey(pi => pi.ID_Empleado);
-
 
         modelBuilder.Entity<Empleado>()
             .Property(p => p.Salario)

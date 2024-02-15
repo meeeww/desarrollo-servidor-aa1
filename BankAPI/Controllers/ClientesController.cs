@@ -1,4 +1,5 @@
-﻿using BankAPI.Model;
+﻿using BankAPI.DTOs;
+using BankAPI.Model;
 using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,49 +68,66 @@ namespace BankAPI.Controllers
          }
 
 
-         [HttpPost]
-         public IActionResult InsertCliente([FromBody] Cliente cliente)
-         {
-             try
-             {
-                 if (cliente == null)
-                     return BadRequest();
+        [HttpPost]
+        public IActionResult InsertCliente([FromBody] ClienteDto clienteDto)
+        {
+            try
+            {
+                if (clienteDto == null)
+                    return BadRequest("El cliente no puede ser nulo.");
 
-                 if (!ModelState.IsValid)
-                     return BadRequest(ModelState);
+                var cliente = new Cliente
+                {
+                    Nombre = clienteDto.Nombre,
+                    Apellido = clienteDto.Apellido,
+                    Email = clienteDto.Email,
+                    Telefono = clienteDto.Telefono,
+                    Direccion = clienteDto.Direccion,
+                };
 
-                 var created = _clientesService.InsertCliente(cliente);
+                _clientesService.InsertCliente(cliente);
 
-                 return Created("Creado", created);
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(ex.Message);
-             }
-         }
+                return CreatedAtAction(nameof(GetClienteById), new { id = cliente.ID_Cliente }, clienteDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el cliente.", error = ex.Message });
+            }
+        }
 
-         [HttpPut]
-         public IActionResult UpdatePedido([FromBody] Cliente cliente)
-         {
-             try
-             {
-                 if (cliente == null)
-                     return BadRequest();
+        [HttpPut]
+        public IActionResult UpdateCliente([FromBody] ClienteUpdateDto clienteDto)
+        {
+            try
+            {
+                if (clienteDto == null)
+                    return BadRequest("El cliente no puede ser nulo.");
 
-                 if (!ModelState.IsValid)
-                     return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-                 _clientesService.UpdateCliente(cliente);
+                // Mapear de ClienteUpdateDto a la entidad Cliente aquí
+                var cliente = new Cliente
+                {
+                    ID_Cliente = clienteDto.ID_Cliente,
+                    Nombre = clienteDto.Nombre,
+                    Apellido = clienteDto.Apellido,
+                    Email = clienteDto.Email,
+                    Telefono = clienteDto.Telefono,
+                    Direccion = clienteDto.Direccion
+                };
 
-                 return NoContent();
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(ex.Message);
-             }
-         }
+                _clientesService.UpdateCliente(cliente);
 
-         [HttpDelete("{id}")]
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
          public IActionResult DeleteCliente(int id)
          {
              try

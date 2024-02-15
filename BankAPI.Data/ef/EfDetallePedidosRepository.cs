@@ -3,11 +3,11 @@ using BankAPI.Model;
 
 namespace BankAPI.Data;
 
-public class EfDetallePedidos : IDetallePedidosRepository
+public class EfDetallePedidosRepository : IDetallePedidosRepository
 {
     private readonly BankAPIContext _context;
 
-    public EfDetallePedidos(BankAPIContext context)
+    public EfDetallePedidosRepository(BankAPIContext context)
     {
         _context = context;
     }

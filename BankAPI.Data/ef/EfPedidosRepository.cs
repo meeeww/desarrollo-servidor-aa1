@@ -3,11 +3,11 @@ using BankAPI.Model;
 
 namespace BankAPI.Data;
 
-public class EfPedidos : IPedidosRepository
+public class EfPedidosRepository : IPedidosRepository
 {
     private readonly BankAPIContext _context;
 
-    public EfPedidos(BankAPIContext context)
+    public EfPedidosRepository(BankAPIContext context)
     {
         _context = context;
     }

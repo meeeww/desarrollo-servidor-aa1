@@ -13,11 +13,10 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BancoAPI", Version = "v1" });
 });
 
+//esto es para el migrate
 var connectionString = "Server=sqlserverapi,1433;Database=api_clase;User Id=sa;Password=ContraFuerteParaOmarhOO123!!;Encrypt=True;TrustServerCertificate=True;";
 builder.Services.AddDbContext<BankAPIContext>(options =>
     options.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
-
-
 
 builder.Services.AddScoped<ClientesService>();
 builder.Services.AddScoped<DetallePedidosService>();
@@ -26,7 +25,7 @@ builder.Services.AddScoped<PedidosService>();
 builder.Services.AddScoped<ProductosService>();
 builder.Services.AddScoped<RegistroVentasService>();
 builder.Services.AddScoped<IClientesRepository, EfClientesRepository>();
-builder.Services.AddScoped<IDetallePedidosRepository, EfDetallePedidos>();
+builder.Services.AddScoped<IDetallePedidosRepository, EfDetallePedidosRepository>();
 builder.Services.AddScoped<IEmpleadosRepository, EfEmpleadosRepository>();
 builder.Services.AddScoped<IPedidosRepository, EfPedidosRepository>();
 builder.Services.AddScoped<IProductosRepository, EfProductosRepository>();
