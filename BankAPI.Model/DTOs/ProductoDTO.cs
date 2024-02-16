@@ -1,4 +1,6 @@
-﻿namespace BankAPI.DTOs
+﻿using BankAPI.Model;
+
+namespace BankAPI.DTOs
 {
     public class ProductoDto
     {
@@ -8,6 +10,7 @@
         public decimal Precio { get; set; }
         public int Stock { get; set; }
         public string Imagen { get; set; }
+        public List<DetallePedidosSimpleDto> DetallePedidos { get; set; } = new List<DetallePedidosSimpleDto>();
     }
 
     public class ProductoUpdateDto
@@ -19,5 +22,4 @@
         public int Stock { get; set; }
         public string Imagen { get; set; }
     }
-
 }
