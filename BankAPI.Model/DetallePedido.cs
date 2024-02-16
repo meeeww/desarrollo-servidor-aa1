@@ -9,7 +9,7 @@ namespace BankAPI.Model
         public int Cantidad { get; set; }
         public decimal Subtotal { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        public DateTime? FechaModificacion { get; set; }
         public int ID_Pedido { get; set; }
         public Pedido Pedido { get; set; }
         public int ID_Producto { get; set; }

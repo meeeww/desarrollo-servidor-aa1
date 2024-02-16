@@ -44,7 +44,7 @@ namespace BankAPI.Controllers
              }
              catch (Exception ex)
              {
-                 return BadRequest(new { message = "Ocurrió un error al obtener los clientes." });
+                 return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
              }
          }
 
@@ -106,7 +106,6 @@ namespace BankAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                // Mapear de ClienteUpdateDto a la entidad Cliente aquí
                 var cliente = new Cliente
                 {
                     ID_Cliente = clienteDto.ID_Cliente,

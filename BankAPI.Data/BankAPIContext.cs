@@ -11,10 +11,15 @@ public class BankAPIContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Cliente>()
             .HasMany(c => c.Pedidos)
             .WithOne(p => p.Cliente)
             .HasForeignKey(p => p.ID_Cliente);
+
+        modelBuilder.Entity<DetallePedido>()
+            .Property(p => p.ID_DetallePedido)
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<DetallePedido>()
             .HasKey(pi => new { pi.ID_Pedido, pi.ID_Producto });
