@@ -17,6 +17,11 @@ public class BankAPIContext : DbContext
             .WithOne(p => p.Cliente)
             .HasForeignKey(p => p.ID_Cliente);
 
+        modelBuilder.Entity<Empleado>()
+            .HasMany(e => e.RegistroVentas)
+            .WithOne(rv => rv.Empleado)
+            .HasForeignKey(em => em.ID_Empleado);
+
         modelBuilder.Entity<DetallePedido>()
             .Property(p => p.ID_DetallePedido)
             .ValueGeneratedOnAdd();

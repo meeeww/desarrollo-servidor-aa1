@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BankAPI.Model;
 using BankAPI.DTOs;
-using MySqlX.XDevAPI;
 
 namespace BankAPI.Data
 {

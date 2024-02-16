@@ -1,3 +1,4 @@
+using BankAPI.DTOs;
 using BankAPI.Model;
 using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -43,41 +44,59 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener el empleado." });
+                return BadRequest(new { message = "Ocurrió un error al obtener el empleado.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public IActionResult InsertEmpleado([FromBody] Empleado empleado)
+        public IActionResult InsertEmpleado([FromBody] EmpleadoDto empleadoDto)
         {
             try
             {
-                if (empleado == null)
-                    return BadRequest();
+                if (empleadoDto == null)
+                    return BadRequest("El empleado no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var empleado = new Empleado
+                {
+                    Nombre = empleadoDto.Nombre,
+                    Apellido = empleadoDto.Apellido,
+                    Cargo = empleadoDto.Cargo,
+                    Salario = empleadoDto.Salario,
+                    FechaEntrada = empleadoDto.FechaEntrada,
+                    FechaSalida = empleadoDto.FechaSalida
+                };
 
-                var created = _empleadoService.InsertEmpleado(empleado);
+                _empleadoService.InsertEmpleado(empleado);
 
-                return Created("Creado", created);
+                return CreatedAtAction(nameof(GetEmpleadoById), new { id = empleado.ID_Empleado }, empleadoDto);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el cliente.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public IActionResult UpdateEmpleado([FromBody] Empleado empleado)
+        public IActionResult UpdateEmpleado([FromBody] EmpleadoUpdateDto empleadoDto)
         {
             try
             {
-                if (empleado == null)
-                    return BadRequest();
+                if (empleadoDto == null)
+                    return BadRequest("El empleado no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
+
+                var empleado = new Empleado
+                {
+                    ID_Empleado = empleadoDto.ID_Empleado,
+                    Nombre = empleadoDto.Nombre,
+                    Apellido = empleadoDto.Apellido,
+                    Cargo = empleadoDto.Cargo,
+                    Salario = empleadoDto.Salario,
+                    FechaEntrada = empleadoDto.FechaEntrada,
+                    FechaSalida = empleadoDto.FechaSalida
+                };
 
                 _empleadoService.UpdateEmpleado(empleado);
 

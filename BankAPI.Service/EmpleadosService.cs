@@ -1,4 +1,5 @@
 using BankAPI.Data;
+using BankAPI.DTOs;
 using BankAPI.Model;
 
 namespace BankAPI.Services
@@ -12,12 +13,12 @@ namespace BankAPI.Services
             _empleadosRepository = empleadosRepository;
         }
 
-        public List<Empleado> GetEmpleados()
+        public List<EmpleadoDto> GetEmpleados()
         {
             return _empleadosRepository.GetEmpleados();
         }
 
-        public Empleado GetEmpleadoById(int id)
+        public EmpleadoDto GetEmpleadoById(int id)
         {
             return _empleadosRepository.GetEmpleadoById(id);
         }

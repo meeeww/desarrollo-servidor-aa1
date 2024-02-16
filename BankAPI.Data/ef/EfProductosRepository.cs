@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BankAPI.Model;
+using BankAPI.DTOs;
 
 namespace BankAPI.Data;
 

@@ -29,43 +29,43 @@ namespace BankAPI.Controllers
             }
         }
 
-         [HttpGet("{id}")]
-         public IActionResult GetClienteById(int id)
-         {
-             try
-             {
-                 var cliente = _clientesService.GetClienteById(id);
-                 if (cliente == null)
-                 {
-                     return NotFound();
-                 }
-                 return Ok(cliente);
+        [HttpGet("{id}")]
+        public IActionResult GetClienteById(int id)
+        {
+            try
+            {
+                var cliente = _clientesService.GetClienteById(id);
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cliente);
 
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
-             }
-         }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
+            }
+        }
 
-         [HttpGet("email={email}")]
-         public IActionResult GetClienteByEmail(string email)
-         {
-             try
-             {
-                 var cliente = _clientesService.GetClienteByEmail(email);
-                 if (cliente == null)
-                 {
-                     return NotFound();
-                 }
-                 return Ok(cliente);
+        [HttpGet("email={email}")]
+        public IActionResult GetClienteByEmail(string email)
+        {
+            try
+            {
+                var cliente = _clientesService.GetClienteByEmail(email);
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cliente);
 
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(ex.Message);
-             }
-         }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
         [HttpPost]
@@ -127,18 +127,18 @@ namespace BankAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-         public IActionResult DeleteCliente(int id)
-         {
-             try
-             {
-                 _clientesService.DeleteCliente(id);
+        public IActionResult DeleteCliente(int id)
+        {
+            try
+            {
+                _clientesService.DeleteCliente(id);
 
-                 return NoContent();
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(ex.Message);
-             }
-         }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
