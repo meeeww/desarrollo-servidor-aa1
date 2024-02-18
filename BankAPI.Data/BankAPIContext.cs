@@ -27,6 +27,18 @@ public class BankAPIContext : DbContext
             .WithOne(dp => dp.Producto)
             .HasForeignKey(pr => pr.ID_Producto);
 
+        modelBuilder.Entity<RegistroVentas>()
+            .Property(r => r.ID_RegistroVentas)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<RegistroVentas>()
+             .HasOne(rv => rv.Empleado)
+             .WithMany(e => e.RegistroVentas)
+             .HasForeignKey(rv => rv.ID_Empleado);
+
+        modelBuilder.Entity<RegistroVentas>()
+            .HasKey(rv => rv.ID_RegistroVentas);
+
         modelBuilder.Entity<DetallePedido>()
             .Property(p => p.ID_DetallePedido)
             .ValueGeneratedOnAdd();
@@ -47,14 +59,6 @@ public class BankAPIContext : DbContext
         modelBuilder.Entity<DetallePedido>()
             .Property(p => p.Subtotal)
             .HasColumnType("decimal(18, 2)");
-
-        modelBuilder.Entity<RegistroVentas>()
-            .HasKey(pi => new { pi.ID_Empleado });
-
-        modelBuilder.Entity<RegistroVentas>()
-            .HasOne(pi => pi.Empleado)
-            .WithMany(i => i.RegistroVentas)
-            .HasForeignKey(pi => pi.ID_Empleado);
 
         modelBuilder.Entity<Empleado>()
             .Property(p => p.Salario)

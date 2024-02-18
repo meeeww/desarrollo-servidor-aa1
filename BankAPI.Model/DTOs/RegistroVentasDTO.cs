@@ -10,9 +10,20 @@ namespace BankAPI.DTOs
         public decimal TotalCostos { get; set; }
         public int TotalImpuestos { get; set; }
         public int ID_Empleado { get; set; }
+        public EmpleadoSimpleDto Empleado { get; set; }
     }
 
-    public class RegistroVentasUpdateDto
+    public class RegistroVentasSimpleDto
+    {
+        public int ID_RegistroVentas { get; set; }
+        public DateTime Fecha { get; set; }
+        public int TotalVentas { get; set; }
+        public decimal TotalCostos { get; set; }
+        public int TotalImpuestos { get; set; }
+        public int ID_Empleado { get; set; }
+    }
+
+    public class RegistroVentaUpdateDto
     {
         public int ID_RegistroVentas { get; set; }
         public DateTime Fecha { get; set; }

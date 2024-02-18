@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using BankAPI.Model;
 using BankAPI.DTOs;
+using MySqlX.XDevAPI;
+using Mysqlx.Cursor;
 
 namespace BankAPI.Data;
 
@@ -13,31 +15,119 @@ public class EfRegistroVentasRepository : IRegistroVentasRepository
         _context = context;
     }
 
-    public List<RegistroVentas> GetRegistrosVentas()
+    public List<RegistroVentasDto> GetRegistrosVentas()
     {
-        return _context.RegistroVentas.ToList();
+        var ventas = _context.RegistroVentas
+                .Include(venta => venta.Empleado)
+                .ToList();
+
+        var ventasDto = ventas.Select(v => new RegistroVentasDto
+        {
+            ID_RegistroVentas = v.ID_RegistroVentas,
+            Fecha = v.Fecha,
+            TotalVentas = v.TotalVentas,
+            TotalCostos = v.TotalCostos,
+            TotalImpuestos = v.TotalImpuestos,
+            ID_Empleado = v.ID_Empleado,
+
+            Empleado = new EmpleadoSimpleDto
+            {
+                ID_Empleado = v.Empleado.ID_Empleado,
+                Nombre = v.Empleado.Nombre,
+                Apellido = v.Empleado.Apellido,
+                Cargo = v.Empleado.Cargo,
+                Salario = v.Empleado.Salario,
+                FechaEntrada = v.Empleado.FechaEntrada,
+                FechaSalida = v.Empleado.FechaSalida
+            }
+        }).ToList();
+
+        return ventasDto;
     }
 
-    public RegistroVentas GetRegistroVentasById(int id)
+    public RegistroVentasDto GetRegistroVentasById(int id)
     {
-        return _context.RegistroVentas.FirstOrDefault(registroVenta => registroVenta.ID_RegistroVentas== id);
+        var ventas = _context.RegistroVentas
+                .Where(venta => venta.ID_RegistroVentas== id)
+                .Include(venta => venta.Empleado)
+                .ToList();
+
+        var ventasDto = ventas.Select(v => new RegistroVentasDto
+        {
+            ID_RegistroVentas = v.ID_RegistroVentas,
+            Fecha = v.Fecha,
+            TotalVentas = v.TotalVentas,
+            TotalCostos = v.TotalCostos,
+            TotalImpuestos = v.TotalImpuestos,
+            ID_Empleado = v.ID_Empleado,
+
+            Empleado = new EmpleadoSimpleDto
+            {
+                ID_Empleado = v.Empleado.ID_Empleado,
+                Nombre = v.Empleado.Nombre,
+                Apellido = v.Empleado.Apellido,
+                Cargo = v.Empleado.Cargo,
+                Salario = v.Empleado.Salario,
+                FechaEntrada = v.Empleado.FechaEntrada,
+                FechaSalida = v.Empleado.FechaSalida
+            }
+        }).FirstOrDefault();
+
+        return ventasDto;
     }
 
-    public RegistroVentas GetRegistroVentasByIdEmpleado(int id)
+    public List<RegistroVentasDto> GetRegistroVentasByIdEmpleado(int id)
     {
-        return _context.RegistroVentas.FirstOrDefault(registroVenta => registroVenta.ID_Empleado == id);
+        var ventas = _context.RegistroVentas
+                .Where(venta => venta.ID_Empleado == id)
+                .Include(venta => venta.Empleado)
+                .ToList();
+
+        var ventasDto = ventas.Select(v => new RegistroVentasDto
+        {
+            ID_RegistroVentas = v.ID_RegistroVentas,
+            Fecha = v.Fecha,
+            TotalVentas = v.TotalVentas,
+            TotalCostos = v.TotalCostos,
+            TotalImpuestos = v.TotalImpuestos,
+            ID_Empleado = v.ID_Empleado,
+
+            Empleado = new EmpleadoSimpleDto
+            {
+                ID_Empleado = v.Empleado.ID_Empleado,
+                Nombre = v.Empleado.Nombre,
+                Apellido = v.Empleado.Apellido,
+                Cargo = v.Empleado.Cargo,
+                Salario = v.Empleado.Salario,
+                FechaEntrada = v.Empleado.FechaEntrada,
+                FechaSalida = v.Empleado.FechaSalida
+            }
+        }).ToList();
+
+        return ventasDto;
     }
 
     public void InsertRegistroVentas(RegistroVentas registroVenta)
     {
+        Console.WriteLine($"Insertando RegistroVentas: ID_RegistroVentas={registroVenta.ID_RegistroVentas}, ID_Empleado={registroVenta.ID_Empleado}, Fecha={registroVenta.Fecha}, TotalVentas={registroVenta.TotalVentas}, TotalCostos={registroVenta.TotalCostos}, TotalImpuestos={registroVenta.TotalImpuestos}");
         _context.RegistroVentas.Add(registroVenta);
         SaveChanges();
     }
 
     public void UpdateRegistroVentas(RegistroVentas registroVenta)
     {
-        _context.Entry(registroVenta).State = EntityState.Modified;
-        SaveChanges();
+        var existingVenta = _context.RegistroVentas.FirstOrDefault(v => v.ID_RegistroVentas == registroVenta.ID_RegistroVentas);
+        if (existingVenta != null)
+        {
+            existingVenta.ID_RegistroVentas = registroVenta.ID_RegistroVentas;
+            existingVenta.Fecha = registroVenta.Fecha;
+            existingVenta.TotalVentas = registroVenta.TotalVentas;
+            existingVenta.TotalCostos = registroVenta.TotalCostos;
+            existingVenta.TotalImpuestos = registroVenta.TotalImpuestos;
+            existingVenta.ID_Empleado = registroVenta.ID_Empleado;
+
+            _context.SaveChanges();
+        }
     }
 
     public void DeleteRegistroVentas(int id)
