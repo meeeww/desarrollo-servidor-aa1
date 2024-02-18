@@ -90,6 +90,7 @@ namespace BankAPI.Controllers
 
                 var detallepedido = new DetallePedido
                 {
+                    ID_DetallePedido = detallePedidoDto.ID_DetallePedido,
                     Cantidad = detallePedidoDto.Cantidad,
                     Subtotal = detallePedidoDto.Subtotal,
                     ID_Pedido = detallePedidoDto.ID_Pedido,

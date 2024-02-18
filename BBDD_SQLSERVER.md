@@ -18,7 +18,7 @@ CREATE TABLE DetallePedidos (
   Cantidad int NOT NULL,
   Subtotal decimal(11,2) NOT NULL,
   FechaCreacion date NOT NULL,
-  FechaModificacion date NOT NULL
+  FechaModificacion date NULL
 );
 
 CREATE TABLE Empleados (
