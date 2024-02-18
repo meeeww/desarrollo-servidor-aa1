@@ -69,7 +69,7 @@ namespace BankAPI.Controllers
 
 
         [HttpPost]
-        public IActionResult InsertCliente([FromBody] ClienteDto clienteDto)
+        public IActionResult InsertCliente([FromBody] ClienteSimpleDto clienteDto)
         {
             try
             {

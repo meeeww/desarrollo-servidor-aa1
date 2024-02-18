@@ -49,7 +49,7 @@ namespace BankAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertProducto([FromBody] ProductoDto productoDto)
+        public IActionResult InsertProducto([FromBody] ProductoSimpleDto productoDto)
         {
             try
             {
