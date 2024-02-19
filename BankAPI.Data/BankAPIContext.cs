@@ -7,7 +7,7 @@ public class BankAPIContext : DbContext
         : base(options)
     {
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -26,6 +26,11 @@ public class BankAPIContext : DbContext
             .HasMany(p => p.DetallePedidos)
             .WithOne(dp => dp.Producto)
             .HasForeignKey(pr => pr.ID_Producto);
+
+        modelBuilder.Entity<Pedido>()
+            .HasMany(p => p.DetallePedidos)
+            .WithOne(dp => dp.Pedido)
+            .HasForeignKey(pr => pr.ID_Pedido);
 
         modelBuilder.Entity<RegistroVentas>()
             .Property(r => r.ID_RegistroVentas)
