@@ -1,4 +1,5 @@
-﻿using BankAPI.Model;
+﻿using BankAPI.DTOs;
+using BankAPI.Model;
 using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener los productos." });
+                return BadRequest(new { message = "Ocurrió un error al obtener los productos.", error = ex.ToString() });
             }
         }
 
@@ -43,41 +44,57 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener el producto." });
+                return BadRequest(new { message = "Ocurrió un error al obtener el producto.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public IActionResult InsertProducto([FromBody] Producto producto)
+        public IActionResult InsertProducto([FromBody] ProductoSimpleDto productoDto)
         {
             try
             {
-                if (producto == null)
-                    return BadRequest();
+                if (productoDto == null)
+                    return BadRequest("El producto no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var producto = new Producto
+                {
+                    Nombre = productoDto.Nombre,
+                    Descripcion = productoDto.Descripcion,
+                    Precio = productoDto.Precio,
+                    Stock = productoDto.Stock,
+                    Imagen = productoDto.Imagen,
+                };
 
-                var created = _productosService.InsertProducto(producto);
+                _productosService.InsertProducto(producto);
 
-                return Created("Creado", created);
+                return CreatedAtAction(nameof(GetProductoById), new { id = producto.ID_Producto }, productoDto);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el producto.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public IActionResult UpdateProducto([FromBody] Producto producto)
+        public IActionResult UpdateProducto([FromBody] ProductoUpdateDto productoDto)
         {
             try
             {
-                if (producto == null)
-                    return BadRequest();
+                if (productoDto == null)
+                    return BadRequest("El producto no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
+
+                var producto = new Producto
+                {
+                    ID_Producto = productoDto.ID_Producto,
+                    Nombre = productoDto.Nombre,
+                    Descripcion = productoDto.Descripcion,
+                    Precio = productoDto.Precio,
+                    Stock = productoDto.Stock,
+                    Imagen = productoDto.Imagen,
+                };
 
                 _productosService.UpdateProducto(producto);
 

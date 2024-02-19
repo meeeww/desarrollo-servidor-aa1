@@ -12,7 +12,6 @@ namespace BankAPI.Model
         public decimal Salario { get; set; }
         public DateTime FechaEntrada { get; set; }
         public DateTime FechaSalida { get; set; }
-
-        public virtual ICollection<RegistroVentas> RegistroVentas { get; set; }
+        public ICollection<RegistroVentas> RegistroVentas { get; set; }
     }
 }

@@ -6,13 +6,12 @@ namespace BankAPI.Model
     {
         [Key]
         public int ID_Pedido { get; set; }
-        public int ID_Cliente { get; set; }
         public DateTime Fecha { get; set; }
         public decimal Total { get; set; }
         public bool Enviado { get; set; }
         public string MetodoPago { get; set; }
-
-        public virtual Cliente Cliente { get; set; }
-        public virtual ICollection<DetallePedido> DetallePedidos { get; set; }
+        public int ID_Cliente { get; set; }
+        public Cliente Cliente { get; set; }
+        public ICollection<DetallePedido> DetallePedidos { get; set; }
     }
 }

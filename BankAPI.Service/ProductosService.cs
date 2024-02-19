@@ -1,6 +1,6 @@
 using BankAPI.Data;
+using BankAPI.DTOs;
 using BankAPI.Model;
-using MySqlX.XDevAPI;
 
 namespace BankAPI.Services
 { 
@@ -13,11 +13,11 @@ namespace BankAPI.Services
             _productosRepository = productosRepository;
         }
 
-        public List<Producto> GetProductos()
+        public List<ProductoDto> GetProductos()
         {
             return _productosRepository.GetProductos();
         }
-        public Producto GetProductoById(int id)
+        public ProductoDto GetProductoById(int id)
         {
             return _productosRepository.GetProductoById(id);
         }

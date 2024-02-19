@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BankAPI.Model;
+using BankAPI.DTOs;
 
 namespace BankAPI.Data;
 
@@ -12,14 +13,65 @@ public class EfProductosRepository : IProductosRepository
         _context = context;
     }
 
-    public List<Producto> GetProductos()
+    public List<ProductoDto> GetProductos()
     {
-        return _context.Productos.ToList();
+        var productos = _context.Productos
+                .Include(producto => producto.DetallePedidos)
+                .ToList();
+
+        var productosDto = productos.Select(p => new ProductoDto
+        {
+            ID_Producto = p.ID_Producto,
+            Nombre = p.Nombre,
+            Descripcion = p.Descripcion,
+            Precio = p.Precio,
+            Stock = p.Stock,
+            Imagen = p.Imagen,
+
+            DetallePedidos = p.DetallePedidos.Select(dp => new DetallePedidosSimpleDto
+            {
+                ID_DetallePedido = dp.ID_DetallePedido,
+                Cantidad = dp.Cantidad,
+                Subtotal = dp.Subtotal,
+                FechaCreacion = dp.FechaCreacion,
+                FechaModificacion = dp.FechaModificacion,
+                ID_Pedido = dp.ID_Pedido,
+                ID_Producto = dp.ID_Producto
+            }).ToList()
+        }).ToList();
+
+        return productosDto;
     }
 
-    public Producto GetProductoById(int id)
+    public ProductoDto GetProductoById(int id)
     {
-        return _context.Productos.FirstOrDefault(producto => producto.ID_Producto == id);
+        var productos = _context.Productos
+                .Where(producto => producto.ID_Producto == id)
+                .Include(producto => producto.DetallePedidos)
+                .ToList();
+
+        var productosDto = productos.Select(p => new ProductoDto
+        {
+            ID_Producto = p.ID_Producto,
+            Nombre = p.Nombre,
+            Descripcion = p.Descripcion,
+            Precio = p.Precio,
+            Stock = p.Stock,
+            Imagen = p.Imagen,
+
+            DetallePedidos = p.DetallePedidos.Select(dp => new DetallePedidosSimpleDto
+            {
+                ID_DetallePedido = dp.ID_DetallePedido,
+                Cantidad = dp.Cantidad,
+                Subtotal = dp.Subtotal,
+                FechaCreacion = dp.FechaCreacion,
+                FechaModificacion = dp.FechaModificacion,
+                ID_Pedido = dp.ID_Pedido,
+                ID_Producto = dp.ID_Producto
+            }).ToList()
+        }).FirstOrDefault();
+
+        return productosDto;
     }
 
     public void InsertProducto(Producto producto)

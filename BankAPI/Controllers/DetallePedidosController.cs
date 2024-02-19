@@ -17,70 +17,86 @@ namespace BankAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDetallePedidos()
+        public IActionResult GetDetallesPedidos()
         {
             try
             {
-                return Ok(_detallePedidosService.GetDetallePedidos());
+                return Ok(_detallePedidosService.GetDetallesPedido());
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "OcurriÛ un error al obtener los registro de ventas." });
+                return BadRequest(new { message = "Ocurri√≥ un error al obtener los detalles de los pedidos.", error = ex.ToString() });
             }
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetDetallePedidosById(int id)
+        public IActionResult GetDetallePedidoById(int id)
         {
             try
             {
-                var cliente = _detallePedidosService.GetDetallePedidosById(id);
-                if (cliente == null)
+                var detallepedido = _detallePedidosService.GetDetallePedidoById(id);
+                if (detallepedido == null)
                 {
                     return NotFound();
                 }
-                return Ok(cliente);
+                return Ok(detallepedido);
 
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "OcurriÛ un error al obtener el registro de venta." });
+                return BadRequest(new { message = "Ocurri√≥ un error al obtener el detallepedido.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public IActionResult InsertDetallePedidos([FromBody] DetallePedido detallePedidosService)
+        public IActionResult InsertDetallePedido([FromBody] DetallePedidosCreateDto detallePedidosCreateDto)
         {
             try
             {
-                if (detallePedidosService == null)
-                    return BadRequest();
+                if (detallePedidosCreateDto == null)
+                    return BadRequest("El detalle del pedido no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var detallepedido = new DetallePedido
+                {
+                    Cantidad = detallePedidosCreateDto.Cantidad,
+                    Subtotal = detallePedidosCreateDto.Subtotal,
+                    FechaCreacion = DateTime.Now,
+                    ID_Pedido = detallePedidosCreateDto.ID_Pedido,
+                    ID_Producto = detallePedidosCreateDto.ID_Producto,
+                };
 
-                var created = _detallePedidosService.InsertDetallePedidos(detallePedidosService);
+                _detallePedidosService.InsertDetallePedido(detallepedido);
 
-                return Created("Creado", created);
+                return CreatedAtAction(nameof(GetDetallePedidoById), new { id = detallepedido.ID_DetallePedido }, detallePedidosCreateDto);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurri√≥ un error al intentar crear el detalle pedido.", error = ex.Message });
             }
         }
 
+
         [HttpPut]
-        public IActionResult UpdateDetallePedidos([FromBody] DetallePedido detallePedidosService)
+        public IActionResult UpdateDetallePedido([FromBody] DetallePedidosUpdateDto detallePedidoDto)
         {
             try
             {
-                if (detallePedidosService == null)
-                    return BadRequest();
+                if (detallePedidoDto == null)
+                    return BadRequest("El detalle pedido no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                _detallePedidosService.UpdateDetallePedidos(detallePedidosService);
+                var detallepedido = new DetallePedido
+                {
+                    ID_DetallePedido = detallePedidoDto.ID_DetallePedido,
+                    Cantidad = detallePedidoDto.Cantidad,
+                    Subtotal = detallePedidoDto.Subtotal,
+                    ID_Pedido = detallePedidoDto.ID_Pedido,
+                    ID_Producto = detallePedidoDto.ID_Producto
+                };
+
+                _detallePedidosService.UpdateDetallePedido(detallepedido);
 
                 return NoContent();
             }

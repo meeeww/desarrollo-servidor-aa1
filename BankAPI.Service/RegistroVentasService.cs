@@ -1,4 +1,5 @@
 using BankAPI.Data;
+using BankAPI.DTOs;
 using BankAPI.Model;
 
 namespace BankAPI.Services
@@ -12,16 +13,16 @@ namespace BankAPI.Services
             _registroVentasRepository = registroVentasRepository;
         }
 
-        public List<RegistroVentas> GetRegistrosVentas()
+        public List<RegistroVentasDto> GetRegistrosVentas()
         {
             return _registroVentasRepository.GetRegistrosVentas();
         }
-        public RegistroVentas GetRegistroVentasById(int id)
+        public RegistroVentasDto GetRegistroVentasById(int id)
         {
             return _registroVentasRepository.GetRegistroVentasById(id);
 
         }
-        public RegistroVentas GetRegistroVentasByIdEmpleado(int id)
+        public List<RegistroVentasDto> GetRegistroVentasByIdEmpleado(int id)
         {
             return _registroVentasRepository.GetRegistroVentasByIdEmpleado(id);
         }

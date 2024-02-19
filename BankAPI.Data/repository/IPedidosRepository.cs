@@ -1,14 +1,15 @@
+using BankAPI.DTOs;
 using BankAPI.Model;
 
 namespace BankAPI.Data
 {
     public interface IPedidosRepository
     {
-        Task<IEnumerable<Pedido>> GetPedidos();
-        Task<Pedido> GetPedidoById(int id);
-        Task<Pedido> GetPedidoByDate(DateTime fecha);
-        Task<bool> InsertPedido(Pedido pedido);
-        Task<bool> UpdatePedido(Pedido pedido);
-        Task<bool> DeletePedido(int id);
+        List<PedidoDto> GetPedidos();
+        PedidoDto GetPedidoById(int id);
+        PedidoDto GetPedidoByDate(DateTime fecha);
+        void InsertPedido(Pedido pedido);
+        void UpdatePedido(Pedido pedido);
+        void DeletePedido(int id);
     }
 }

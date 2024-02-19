@@ -1,7 +1,7 @@
-using BankAPI.Services;
+using BankAPI.DTOs;
 using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -9,109 +9,116 @@ namespace BankAPI.Controllers
     [ApiController]
     public class EmpleadosController : ControllerBase
     {
-        private readonly EmpleadosService _empleadosService;
-        private readonly ILoggingRepository _logger;
+        private readonly EmpleadosService _empleadoService;
 
-        public EmpleadosController(EmpleadosService empleadosService, ILoggingRepository logger)
+        public EmpleadosController(EmpleadosService empleadosService)
         {
-            _empleadosService = empleadosService;
-            _logger = logger;
+            _empleadoService = empleadosService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmpleados()
+        public IActionResult GetEmpleados()
         {
-
             try
             {
-                return Ok(await _empleadosService.GetEmpleados());
+                return Ok(_empleadoService.GetEmpleados());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los empleados.", error = ex.ToString() });
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmpleadoById(int id)
+        public IActionResult GetEmpleadoById(int id)
         {
-
             try
             {
-                var empleado = await _empleadosService.GetEmpleadoById(id);
+                var empleado = _empleadoService.GetEmpleadoById(id);
                 if (empleado == null)
                 {
                     return NotFound();
                 }
                 return Ok(empleado);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el empleado.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertEmpleado([FromBody] Empleado empleado)
+        public IActionResult InsertEmpleado([FromBody] EmpleadoSimpleDto empleadoDto)
         {
-
             try
             {
-                if (empleado == null)
-                    return BadRequest();
+                if (empleadoDto == null)
+                    return BadRequest("El empleado no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var empleado = new Empleado
+                {
+                    Nombre = empleadoDto.Nombre,
+                    Apellido = empleadoDto.Apellido,
+                    Cargo = empleadoDto.Cargo,
+                    Salario = empleadoDto.Salario,
+                    FechaEntrada = empleadoDto.FechaEntrada,
+                    FechaSalida = empleadoDto.FechaSalida
+                };
 
-                var created = await _empleadosService.InsertEmpleado(empleado);
+                _empleadoService.InsertEmpleado(empleado);
 
-                return Created("creado", created);
+                return CreatedAtAction(nameof(GetEmpleadoById), new { id = empleado.ID_Empleado }, empleadoDto);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el cliente.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmpleado([FromBody] Empleado empleado)
+        public IActionResult UpdateEmpleado([FromBody] EmpleadoUpdateDto empleadoDto)
         {
-
             try
             {
-                if (empleado == null)
-                    return BadRequest();
+                if (empleadoDto == null)
+                    return BadRequest("El empleado no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _empleadosService.UpdateEmpleado(empleado);
+                var empleado = new Empleado
+                {
+                    ID_Empleado = empleadoDto.ID_Empleado,
+                    Nombre = empleadoDto.Nombre,
+                    Apellido = empleadoDto.Apellido,
+                    Cargo = empleadoDto.Cargo,
+                    Salario = empleadoDto.Salario,
+                    FechaEntrada = empleadoDto.FechaEntrada,
+                    FechaSalida = empleadoDto.FechaSalida
+                };
+
+                _empleadoService.UpdateEmpleado(empleado);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmpleado(int id)
+        public IActionResult DeleteEmpleado(int id)
         {
-
             try
             {
-                await _empleadosService.DeleteEmpleado(id);
+                _empleadoService.DeleteEmpleado(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

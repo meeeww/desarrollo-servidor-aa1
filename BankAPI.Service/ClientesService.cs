@@ -1,4 +1,5 @@
 using BankAPI.Data;
+using BankAPI.DTOs;
 using BankAPI.Model;
 
 namespace BankAPI.Services
@@ -12,17 +13,17 @@ namespace BankAPI.Services
             _clientesRepository = clientesRepository;
         }
 
-        public List<Cliente> GetClientes()
+        public List<ClienteDto> GetClientes()
         {
             return _clientesRepository.GetClientes();
         }
 
-        public Cliente GetClienteById(int id)
+        public ClienteDto GetClienteById(int id)
         {
             return _clientesRepository.GetClienteById(id);
         }
 
-        public Cliente GetClienteByEmail(string email)
+        public ClienteDto GetClienteByEmail(string email)
         {
             return _clientesRepository.GetClienteByEmail(email);
         }
@@ -38,6 +39,7 @@ namespace BankAPI.Services
         {
             _clientesRepository.UpdateCliente(cliente);
         }
+
         public void DeleteCliente(int id)
         {
             _clientesRepository.DeleteCliente(id);
