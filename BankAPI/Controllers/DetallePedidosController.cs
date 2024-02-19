@@ -1,3 +1,5 @@
+using BankAPI.Data;
+using BankAPI.Model;
 using BankAPI.Services;
 using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -96,7 +98,7 @@ namespace BankAPI.Controllers
 
             try
             {
-                await _detallePedidosService.DeleteDetallePedido(id);
+                _detallePedidosService.DeleteDetallePedidos(id);
 
                 return NoContent();
             }
