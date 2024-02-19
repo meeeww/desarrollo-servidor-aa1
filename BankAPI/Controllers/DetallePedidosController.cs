@@ -1,18 +1,17 @@
-using BankAPI.DTOs;
+using BankAPI.Data;
 using BankAPI.Model;
 using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.Intrinsics.Arm;
 
 namespace BankAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DetallePedidosController : ControllerBase
+    public class DetallePedidosService : ControllerBase
     {
         private readonly DetallePedidosService _detallePedidosService;
 
-        public DetallePedidosController(DetallePedidosService detallePedidosService)
+        public DetallePedidosService(DetallePedidosService detallePedidosService)
         {
             _detallePedidosService = detallePedidosService;
         }
@@ -26,7 +25,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener los detalles de los pedidos.", error = ex.ToString() });
+                return BadRequest(new { message = "OcurriÃ³ un error al obtener los detalles de los pedidos.", error = ex.ToString() });
             }
         }
 
@@ -45,7 +44,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al obtener el detallepedido.", error = ex.ToString() });
+                return BadRequest(new { message = "OcurriÃ³ un error al obtener el detallepedido.", error = ex.ToString() });
             }
         }
 
@@ -72,7 +71,7 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Ocurrió un error al intentar crear el detalle pedido.", error = ex.Message });
+                return BadRequest(new { message = "OcurriÃ³ un error al intentar crear el detalle pedido.", error = ex.Message });
             }
         }
 
@@ -108,12 +107,11 @@ namespace BankAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetallePedido(int id)
+        public IActionResult DeleteDetallePedidos(int id)
         {
-
             try
             {
-                _detallePedidosService.DeleteDetallePedido(id);
+                _detallePedidosService.DeleteDetallePedidos(id);
 
                 return NoContent();
             }
