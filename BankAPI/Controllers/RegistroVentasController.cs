@@ -1,7 +1,8 @@
-﻿using BankAPI.Services;
+﻿using BankAPI.DTOs;
 using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
+using Mysqlx.Cursor;
 
 namespace BankAPI.Controllers
 {
@@ -10,122 +11,132 @@ namespace BankAPI.Controllers
     public class RegistroVentasController : ControllerBase
     {
         private readonly RegistroVentasService _registroVentasService;
-        private readonly ILoggingRepository _logger;
 
-        public RegistroVentasController(RegistroVentasService registroVentasService, ILoggingRepository logger)
+        public RegistroVentasController(RegistroVentasService registroVentasService)
         {
             _registroVentasService = registroVentasService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRegistrosVentas()
+        public IActionResult GetRegistroVentas()
         {
             try
             {
-                return Ok(await _registroVentasService.GetRegistrosVentas());
+                return Ok(_registroVentasService.GetRegistrosVentas());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los registro de ventas.", error = ex.ToString() });
             }
         }
 
-        [HttpGet("id={id}")]
-        public async Task<IActionResult> GetRegistroVentasById(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetRegistroVentasById(int id)
         {
             try
             {
-                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
-                if (registroVentas == null)
+                var cliente = _registroVentasService.GetRegistroVentasById(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(registroVentas);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el registro de venta.", error = ex.ToString() });
             }
         }
 
-        [HttpGet("idEmpleado={id}")]
-        public async Task<IActionResult> GetRegistroVentasByIdEmpleado(int id)
+        [HttpGet("empleado={id}")]
+        public IActionResult GetRegistroVentasByIdEmpleado(int id)
         {
             try
             {
-                var registroVentas = await _registroVentasService.GetRegistroVentasById(id);
-                if (registroVentas == null)
+                var cliente = _registroVentasService.GetRegistroVentasByIdEmpleado(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(registroVentas);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el registro de venta.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRegistroVentas([FromBody] RegistroVentas registroVentas)
+        public IActionResult InsertRegistroVentas([FromBody] RegistroVentasSimpleDto registroVentaDto)
         {
             try
             {
-                if (registroVentas == null)
-                    return BadRequest();
+                if (registroVentaDto == null)
+                    return BadRequest("El registro de venta no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var venta = new RegistroVentas
+                {
+                    Fecha = registroVentaDto.Fecha,
+                    TotalVentas = registroVentaDto.TotalVentas,
+                    TotalCostos = registroVentaDto.TotalCostos,
+                    TotalImpuestos = registroVentaDto.TotalImpuestos,
+                    ID_Empleado = registroVentaDto.ID_Empleado,
+                };
 
-                var created = await _registroVentasService.InsertRegistroVentas(registroVentas);
+                _registroVentasService.InsertRegistroVentas(venta);
 
-                return Created("creado", created);
+                return CreatedAtAction(nameof(GetRegistroVentasById), new { id = venta.ID_RegistroVentas}, registroVentaDto);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el registro de venta.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRegistroVentas([FromBody] RegistroVentas registroVentas)
+        public IActionResult UpdateCliente([FromBody] RegistroVentaUpdateDto registroVentaDto)
         {
             try
             {
-                if (registroVentas == null)
-                    return BadRequest();
+                if (registroVentaDto == null)
+                    return BadRequest("El registro de venta no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _registroVentasService.UpdateRegistroVentas(registroVentas);
+                var registro = new RegistroVentas
+                {
+                    ID_RegistroVentas = registroVentaDto.ID_RegistroVentas,
+                    Fecha = registroVentaDto.Fecha,
+                    TotalCostos = registroVentaDto.TotalCostos,
+                    TotalVentas = registroVentaDto.TotalVentas,
+                    TotalImpuestos = registroVentaDto.TotalImpuestos,
+                    ID_Empleado = registroVentaDto.ID_Empleado
+                };
+
+                _registroVentasService.UpdateRegistroVentas(registro);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteRegistroVentas(int id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteRegistroVentas(int id)
         {
             try
             {
-                await _registroVentasService.DeleteRegistroVentas(id);
+                _registroVentasService.DeleteRegistroVentas(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

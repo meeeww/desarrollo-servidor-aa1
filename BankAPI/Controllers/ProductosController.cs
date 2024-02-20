@@ -1,8 +1,7 @@
-﻿using BankAPI.Services;
+﻿using BankAPI.DTOs;
 using BankAPI.Model;
+using BankAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
@@ -11,103 +10,113 @@ namespace BankAPI.Controllers
     public class ProductosController : ControllerBase
     {
         private readonly ProductosService _productosService;
-        private readonly ILoggingRepository _logger;
 
-        public ProductosController(ProductosService productosService, ILoggingRepository logger)
+        public ProductosController(ProductosService productosService)
         {
             _productosService = productosService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductos()
+        public IActionResult GetProductos()
         {
             try
             {
-                return Ok(await _productosService.GetProductos());
+                return Ok(_productosService.GetProductos());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los productos.", error = ex.ToString() });
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductoById(int id)
+        public IActionResult GetProductoById(int id)
         {
             try
             {
-                var producto = await _productosService.GetProductoById(id);
-                if (producto == null)
+                var cliente = _productosService.GetProductoById(id);
+                if (cliente == null)
                 {
                     return NotFound();
                 }
-                return Ok(producto);
+                return Ok(cliente);
+
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener el producto.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProducto([FromBody] Producto producto)
+        public IActionResult InsertProducto([FromBody] ProductoSimpleDto productoDto)
         {
             try
             {
-                if (producto == null)
-                    return BadRequest();
+                if (productoDto == null)
+                    return BadRequest("El producto no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var producto = new Producto
+                {
+                    Nombre = productoDto.Nombre,
+                    Descripcion = productoDto.Descripcion,
+                    Precio = productoDto.Precio,
+                    Stock = productoDto.Stock,
+                    Imagen = productoDto.Imagen,
+                };
 
-                var created = await _productosService.InsertProducto(producto);
+                _productosService.InsertProducto(producto);
 
-                return Created("creado", created);
+                return CreatedAtAction(nameof(GetProductoById), new { id = producto.ID_Producto }, productoDto);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el producto.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProducto([FromBody] Producto producto)
+        public IActionResult UpdateProducto([FromBody] ProductoUpdateDto productoDto)
         {
             try
             {
-                if (producto == null)
-                    return BadRequest();
+                if (productoDto == null)
+                    return BadRequest("El producto no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _productosService.UpdateProducto(producto);
+                var producto = new Producto
+                {
+                    ID_Producto = productoDto.ID_Producto,
+                    Nombre = productoDto.Nombre,
+                    Descripcion = productoDto.Descripcion,
+                    Precio = productoDto.Precio,
+                    Stock = productoDto.Stock,
+                    Imagen = productoDto.Imagen,
+                };
+
+                _productosService.UpdateProducto(producto);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducto(int id)
+        public IActionResult DeleteProducto(int id)
         {
             try
             {
-                await _productosService.DeleteProducto(id);
+                _productosService.DeleteProducto(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

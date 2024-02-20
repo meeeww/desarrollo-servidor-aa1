@@ -1,7 +1,7 @@
-﻿using BankAPI.Model;
-using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
+﻿using BankAPI.DTOs;
+using BankAPI.Model;
 using BankAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BankAPI.Controllers
 {
@@ -10,34 +10,31 @@ namespace BankAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly ClientesService _clientesService;
-        private readonly ILoggingRepository _logger;
 
-        public ClientesController(ClientesService clientesService, ILoggingRepository logger)
+        public ClientesController(ClientesService clientesService)
         {
             _clientesService = clientesService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetClientes()
+        public IActionResult GetClientes()
         {
             try
             {
-                return Ok(await _clientesService.GetClientes());
+                return Ok(_clientesService.GetClientes());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetClienteById(int id)
+        public IActionResult GetClienteById(int id)
         {
             try
             {
-                var cliente = await _clientesService.GetClienteById(id);
+                var cliente = _clientesService.GetClienteById(id);
                 if (cliente == null)
                 {
                     return NotFound();
@@ -47,17 +44,16 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los clientes.", error = ex.ToString() });
             }
         }
 
         [HttpGet("email={email}")]
-        public async Task<IActionResult> GetClienteByEmail(string email)
+        public IActionResult GetClienteByEmail(string email)
         {
             try
             {
-                var cliente = await _clientesService.GetClienteByEmail(email);
+                var cliente = _clientesService.GetClienteByEmail(email);
                 if (cliente == null)
                 {
                     return NotFound();
@@ -67,68 +63,80 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> InsertCliente([FromBody] Cliente cliente)
+        public IActionResult InsertCliente([FromBody] ClienteSimpleDto clienteDto)
         {
             try
             {
-                if (cliente == null)
-                    return BadRequest();
+                if (clienteDto == null)
+                    return BadRequest("El cliente no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var cliente = new Cliente
+                {
+                    Nombre = clienteDto.Nombre,
+                    Apellido = clienteDto.Apellido,
+                    Email = clienteDto.Email,
+                    Telefono = clienteDto.Telefono,
+                    Direccion = clienteDto.Direccion,
+                };
 
-                var created = await _clientesService.InsertCliente(cliente);
+                _clientesService.InsertCliente(cliente);
 
-                return Created("creado", created);
+                return CreatedAtAction(nameof(GetClienteById), new { id = cliente.ID_Cliente }, clienteDto);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el cliente.", error = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePedido([FromBody] Cliente cliente)
+        public IActionResult UpdateCliente([FromBody] ClienteUpdateDto clienteDto)
         {
             try
             {
-                if (cliente == null)
-                    return BadRequest();
+                if (clienteDto == null)
+                    return BadRequest("El cliente no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _clientesService.UpdateCliente(cliente);
+                var cliente = new Cliente
+                {
+                    ID_Cliente = clienteDto.ID_Cliente,
+                    Nombre = clienteDto.Nombre,
+                    Apellido = clienteDto.Apellido,
+                    Email = clienteDto.Email,
+                    Telefono = clienteDto.Telefono,
+                    Direccion = clienteDto.Direccion
+                };
+
+                _clientesService.UpdateCliente(cliente);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
+        public IActionResult DeleteCliente(int id)
         {
             try
             {
-                await _clientesService.DeleteCliente(id);
+                _clientesService.DeleteCliente(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }

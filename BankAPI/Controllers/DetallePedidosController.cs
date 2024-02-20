@@ -1,101 +1,114 @@
 using BankAPI.Data;
 using BankAPI.Model;
 using BankAPI.Services;
-using BankAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using BankAPI.Data;
 
 namespace BankAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DetallePedidosController : ControllerBase
+    public class DetallePedidosService : ControllerBase
     {
         private readonly DetallePedidosService _detallePedidosService;
-        private readonly ILoggingRepository _logger;
 
-        public DetallePedidosController(DetallePedidosService detallePedidosService, ILoggingRepository logger)
+        public DetallePedidosService(DetallePedidosService detallePedidosService)
         {
             _detallePedidosService = detallePedidosService;
-            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDetallesPedido()
+        public IActionResult GetDetallesPedidos()
         {
-            return Ok(await _detallePedidosService.GetDetallesPedido());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDetallePedidoById(int id)
-        {
-
             try
             {
-                var detallePedido = await _detallePedidosService.GetDetallePedidoById(id);
-                if (detallePedido == null)
-                {
-                    return NotFound();
-                }
-                return Ok(detallePedido);
+                return Ok(_detallePedidosService.GetDetallesPedido());
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al obtener los detalles de los pedidos.", error = ex.ToString() });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetDetallePedidoById(int id)
+        {
+            try
+            {
+                var detallepedido = _detallePedidosService.GetDetallePedidoById(id);
+                if (detallepedido == null)
+                {
+                    return NotFound();
+                }
+                return Ok(detallepedido);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Ocurrió un error al obtener el detallepedido.", error = ex.ToString() });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertDetallePedido([FromBody] DetallePedido detallePedido)
+        public IActionResult InsertDetallePedido([FromBody] DetallePedidosCreateDto detallePedidosCreateDto)
         {
-
             try
             {
-                if (detallePedido == null)
-                    return BadRequest();
+                if (detallePedidosCreateDto == null)
+                    return BadRequest("El detalle del pedido no puede ser nulo.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                var detallepedido = new DetallePedido
+                {
+                    Cantidad = detallePedidosCreateDto.Cantidad,
+                    Subtotal = detallePedidosCreateDto.Subtotal,
+                    FechaCreacion = DateTime.Now,
+                    ID_Pedido = detallePedidosCreateDto.ID_Pedido,
+                    ID_Producto = detallePedidosCreateDto.ID_Producto,
+                };
 
-                var created = await _detallePedidosService.InsertDetallePedido(detallePedido);
+                _detallePedidosService.InsertDetallePedido(detallepedido);
 
-                return Created("creado", created);
+                return CreatedAtAction(nameof(GetDetallePedidoById), new { id = detallepedido.ID_DetallePedido }, detallePedidosCreateDto);
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Ocurrió un error al intentar crear el detalle pedido.", error = ex.Message });
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateDetallePedido([FromBody] DetallePedido detallePedido)
-        {
 
+        [HttpPut]
+        public IActionResult UpdateDetallePedido([FromBody] DetallePedidosUpdateDto detallePedidoDto)
+        {
             try
             {
-                if (detallePedido == null)
-                    return BadRequest();
+                if (detallePedidoDto == null)
+                    return BadRequest("El detalle pedido no puede ser nulo.");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _detallePedidosService.UpdateDetallePedido(detallePedido);
+                var detallepedido = new DetallePedido
+                {
+                    ID_DetallePedido = detallePedidoDto.ID_DetallePedido,
+                    Cantidad = detallePedidoDto.Cantidad,
+                    Subtotal = detallePedidoDto.Subtotal,
+                    ID_Pedido = detallePedidoDto.ID_Pedido,
+                    ID_Producto = detallePedidoDto.ID_Producto
+                };
+
+                _detallePedidosService.UpdateDetallePedido(detallepedido);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetallePedido(int id)
+        public IActionResult DeleteDetallePedidos(int id)
         {
-
             try
             {
                 _detallePedidosService.DeleteDetallePedidos(id);
@@ -104,7 +117,6 @@ namespace BankAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.SaveLog(ex);
                 return BadRequest(ex.Message);
             }
         }
